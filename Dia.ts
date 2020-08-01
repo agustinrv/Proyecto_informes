@@ -1,6 +1,7 @@
 ///<reference path="node_modules/@types/jquery/index.d.ts" />
+///<reference path="mes.ts"/>
 
-function Agregar()
+function Agregar(caso)
 {
     let dia:any={};
     let pagina="BACKEND/dia/agregar";
@@ -10,7 +11,7 @@ function Agregar()
     dia.videos=$("#txtVideos").val();
     dia.horas=$("#txtHoras").val();
     dia.revisitas=$("#txtRevisitas").val();
-    dia.estudios=$("#Estudios").val();
+    dia.estudios=$("#txtEstudios").val();
 
 
     let form = new FormData();
@@ -25,11 +26,12 @@ function Agregar()
         processData:false,
         async:true
     }).done(function(respuesta){
-        console.log(respuesta);
-
-
+        AlertSuccess(respuesta.mensaje);
+        CargarTabla();
     }).fail(function(jqxhr){
-        console.log(jqxhr.responseText);
+        let respuesta=JSON.parse(jqxhr.responseText);
+
+        AlertDanger(respuesta.mensaje);
     });
     
 }

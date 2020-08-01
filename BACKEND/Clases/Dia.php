@@ -207,7 +207,7 @@ class Dia
         if(self::BorrarUnoJson($id))
         {
             $retorno->exito=true;
-            $retorno->mensaje="No se a podido eliminar";
+            $retorno->mensaje="Se a eliminado exitosamente";
             $retorno->status=200;
         }
         else 
@@ -219,6 +219,8 @@ class Dia
 
         return $response->withJson($retorno,$retorno->status);
     }
+
+    
 
 
 

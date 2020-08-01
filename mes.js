@@ -16,13 +16,12 @@ function CargarTabla() {
             var totalHoras = 0;
             var totalRevisitas_1 = 0;
             var totalEstudios_1 = 0;
-            var contadorDias_1 = 0;
-            var html_1 = '<h1 style="padding-top: 2%;">Mes Actual</h1>';
+            var totalDias = listaDias.length;
+            var html_1 = '<h1 >Mes Actual</h1>';
             html_1 += '<table class="table table-sm table-dark table-hover mt-3">';
             html_1 += '<tr><th></th><th>Nº</th><th>Fecha</th><th>Publicaciones</th><th>Videos</th><th>Horas</th>';
             html_1 += '<th>Revisitas</th><th>Estudios</th><th>Modificar</th><th>Eliminar</th></tr>';
             listaDias.forEach(function (element) {
-                contadorDias_1++;
                 totalPublicaciones_1 += parseInt(element.publicaciones);
                 totalVideos_1 += parseInt(element.videos);
                 // totalHoras+=element.horas;//lo unico que se me ocurre es agarrar las horas sumarlas todas y despues sumar todos los minutos y divirlos
@@ -34,7 +33,7 @@ function CargarTabla() {
                 html_1 += '<td><input type="button" value="Modificar" class="btn btn-warning" onclick="Modificar()"></td>';
                 html_1 += '<td><input type="button" value="Eliminar" class="btn btn-danger" onclick="Eliminar(' + element.id + ')"></td></tr>';
             });
-            html_1 += '<tr><td>Total:</td><td class="text-right">' + contadorDias_1 + '</td><td class="text-left">Dias</td><td class="text-center">' + totalPublicaciones_1 + '</td>';
+            html_1 += '<tr><td>Total:</td><td class="text-left" colspan="2">' + totalDias + ' Dias</td><td class="text-center">' + totalPublicaciones_1 + '</td>';
             html_1 += '<td class="text-center">' + totalVideos_1 + '</td><td class="text-center">' + totalHoras + '</td>';
             html_1 += '<td class="text-center">' + totalRevisitas_1 + '</td><td class="text-center">' + totalEstudios_1 + '</td></tr></table>';
             $("#tablaMes").html(html_1);
@@ -43,20 +42,24 @@ function CargarTabla() {
         console.log(jqxhr.responseText);
     });
 }
+//Cambiar confirm por ventana Modal
 function Eliminar(id) {
     var pagina = "BACKEND/dia/borrar";
-    $.ajax({
-        url: pagina,
-        type: "delete",
-        data: { "id": id },
-        dataType: "json",
-        async: true
-    }).done(function ($resultado) {
-        CargarTabla();
-    }).fail(function (jqxhr) {
-        var respuesta = JSON.parse(jqxhr.responseText);
-        AlertDanger(respuesta.mensaje);
-    });
+    if (confirm("Desea eliminar la fila nº" + id)) {
+        $.ajax({
+            url: pagina,
+            type: "delete",
+            data: { "id": id },
+            dataType: "json",
+            async: true
+        }).done(function (resultado) {
+            CargarTabla();
+            AlertSuccess(resultado.mensaje);
+        }).fail(function (jqxhr) {
+            var respuesta = JSON.parse(jqxhr.responseText);
+            AlertDanger(respuesta.mensaje);
+        });
+    }
 }
 function Modificar() {
 }
