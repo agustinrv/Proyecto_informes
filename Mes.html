@@ -16,43 +16,44 @@
 
 <!--para iconos-->
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="mes.js"></script>
 </head>
 
-<body class="bg-info">
+<header> <nav class="navbar navbar-expand-md bg-dark navbar-dark fixed-top">
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+      <ul class="navbar-nav">
+
+        <li class="dropdown dropdown">
+          <a href="./index.html" class="nav-link text-primary"  id="navbardrop" ><!--data-toggle="dropdown"-->
+            Index <b class="caret"></b>
+          </a>
+        </li>
+
+      </ul>
+    </div>
+  </nav>
+</div>
+</header>
+
+<body onload="CargarTabla()" class="bg-info ">
 
     <div class="container-fluid">
-        <div class="container w-75" style="height: 400px; background-color: lightgrey;">
-            <div id="tabla">
-                <table class="table table-sm table-dark table-hover">
-                    <tr>
-                        <th>Nº</th>
-                        <th>Fecha</th>
-                        <th>Publicaciones</th>
-                        <th>Videos</th>
-                        <th>Horas</th>
-                        <th>Revisitas</th>
-                        <th>Estudios</th>
-                    </tr>
-                    <tr>
-                        <td>contador</td>
-                        <td>element.fecha</td>
-                        <td>element.publicaciones</td>
-                        <td>element.videos</td>
-                        <td>element.horas</td>
-                        <td>element.revisitas</td>
-                        <td>element.estudios</td>
-                    </tr>
-                </table>
-
-
-
-
+        <div class="container w-75 mt-5" style="height: 400px;">
+            <div id="tablaMes">
             </div>
+            
+            <div id="divAlert"></div>
         </div>
+        
     </div>
 
 
-    
+   
 </body>
 </html>

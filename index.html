@@ -15,11 +15,31 @@
 
 <!--para iconos-->
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="dia.js"></script>
 </head>
 
 <header>
-    <!--Aqui va a ir la barra de herramientas para navegar x la pagina-->
+    <nav class="navbar navbar-expand-md bg-dark navbar-dark fixed-top">
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+  
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+          <ul class="navbar-nav">
+  
+            <li class="dropdown dropdown">
+              <a class="nav-link text-primary"  id="navbardrop" href="Mes.html">
+                Mes<b class="caret"></b>
+              </a>
+            </li>
+
+          </ul>
+        </div>
+      </nav>
+    </div>
+  
 </header>
 
 
@@ -27,8 +47,8 @@
 <body class="bg-info">
 
     <div class="container-fluid">
-        <div class="container w-75 ">
-            <h1>Informe</h1>
+        <div class="container w-75 mt-5">
+            <h1 style="padding-top: 2%;">Informe</h1>
             <form action="" class=" form-control" style="height: 400px; background-color: lightgrey;">
             <div class="row form-group">
                 <div class="col-1 mt-3 mr-4"><label for="dateFecha" class="h6">Fecha</label></div>
@@ -51,7 +71,7 @@
             <div class="row form-group">
                 <div class="col-1 mt-1 mr-4"><label for="txtHoras" class="h6">Horas</label></div>
                 <div class="ml-4 mt-1"><label for="txtHoras" class="fas fa-clock"></label></div>
-                <div class="col"><input type="time" id="txtHoras" class="form-control"  placeholder="Horas"></div>
+                <div class="col"><input type="time" id="txtHoras" value="00:00" class="form-control"  placeholder="Horas"></div>
             </div>
 
             <div class="row form-group">

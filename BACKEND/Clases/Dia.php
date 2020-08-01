@@ -9,6 +9,7 @@ use Firebase\JWT\JWT;
 
 class Dia
 {
+    public $id;
     public $fecha;
     public $publicaciones;
     public $videos;
@@ -25,7 +26,19 @@ class Dia
         $this->horas=$_horas;
         $this->revisitas=$_revisitas;
         $this->estudios=$_estudios;
+    }
 
+    public static function GenerarID()
+    {
+        $lista=self::TraerTodosJSON();
+        $lista=$lista;
+        $retorno=1;
+        if(!empty($lista))
+        {
+            $i=count($lista)-1;
+            $retorno=$lista[$i]->id+1;
+        }
+        return $retorno;
     }
 
     ///Es posible que esto no se use
@@ -71,6 +84,7 @@ class Dia
     {   
         $recibo=$request->getParsedBody();
         $json=json_decode($recibo["cadenaJson"]);
+        $json->id= self::GenerarID();
         $retorno= new stdClass();
 
         if(self::AgregarEnArchivoJSON($json))
@@ -94,11 +108,9 @@ class Dia
     private static function TraerTodosJSON()
     {
         $path="./Meses/ejemplo.json";
-        $archivo=fopen($path,"a");
-        $retorno=new stdClass();
-        $lista=array();
-        $retorno->exito=false;
-        $retorno->lista=$lista;
+        $archivo=fopen($path,"r");
+        $listaRetorno=array();
+        $listaRetorno;
 
         if(isset($archivo))
         {
@@ -106,35 +118,103 @@ class Dia
             while(!feof($archivo))
             {
                 $cadenaJson=fgets($archivo);
-                $json=json_decode($cadenaJson);
-                array_push($lista,$json);
+                if(!empty($cadenaJson))
+                {
+                    $json=json_decode($cadenaJson);
+                    array_push($listaRetorno,$json);
+                }
+
+                
             }
 
             fclose($archivo);
-            $retorno->lista=$lista;
-            $retorno->exito=true;
         }
 
-        return $retorno;
+        return $listaRetorno;
     }
 
     public static function TraerTodos(Request $request,Response $response,$args)
     {
-        $json=self::TraerTodosJSON();
+        $lista=self::TraerTodosJSON();
         $retorno = new stdClass();
 
-        if($json->exito)
+        if(!empty($lista))
         {
             $retorno->exito=true;
             $retorno->status=200;
             $retorno->mensaje="Se han recuperado exitosamente!!!";
-            $retorno->listaDias=$json->lista;
+            $retorno->listaDias=$lista;
         }
         else
         {
             $retorno->exito=false;
             $retorno->status=400;
             $retorno->mensaje="No se han podido recuperar";
+        }
+
+        return $response->withJson($retorno,$retorno->status);
+    }
+    public static function EscribirEnArchivoJSON($lista)
+    {
+        $path="./Meses/ejemplo.json";
+        $archivo=fopen($path,"w");
+        $retorno=false;
+        
+        if(isset($archivo))
+        {
+            foreach ($lista as $key => $i) {
+                $cadenaJson=json_encode($i);
+                fwrite($archivo,$cadenaJson . "\n");    
+            }
+            
+            fclose($archivo);
+            $retorno=true;
+        }
+
+        return $retorno;
+    }
+
+    public static function BorrarUnoJSON($id)
+    {
+        $lista=self::TraerTodosJSON();
+        $nuevaLista=array();
+        $retorno=false;
+
+        foreach ($lista as $key => $i) {
+            
+            if($i->id==$id)
+            {
+                $retorno =true;
+                continue;
+            }
+            array_push($nuevaLista,$i);
+        }
+        if($retorno==true)
+        {
+            self::EscribirEnArchivoJSON($nuevaLista);
+        }
+
+        return $retorno;
+    }
+
+    public static function BorrarUno(Request $request,Response $response,$args)
+    {
+        $recibo=$request->getParsedBody();
+        
+        $id=$recibo["id"];
+        $retorno=new stdClass();        
+
+        if(self::BorrarUnoJson($id))
+        {
+            $retorno->exito=true;
+            $retorno->mensaje="No se a podido eliminar";
+            $retorno->status=200;
+        }
+        else 
+        {
+            $retorno->status=400;
+            $retorno->exito=false;
+            $retorno->mensaje="No se a podido eliminar";
         }
 
         return $response->withJson($retorno,$retorno->status);

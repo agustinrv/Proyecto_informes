@@ -20,7 +20,7 @@ $app->group("/dia",function(){
 
     $this->post("/agregar",\Dia::class . "::AgregarUno");
     $this->get("/traerTodos",\Dia::class . "::TraerTodos");
-    $this->get("/traerUno",\Dia::class . "::TraerUno");
+   // $this->get("/traerUno",\Dia::class . "::TraerUno");
     $this->delete("/borrar",\Dia::class . "::BorrarUno");
     $this->put("/modificar",\Dia::class . "::ModificarUno");
 });
