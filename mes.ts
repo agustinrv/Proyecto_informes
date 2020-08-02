@@ -1,6 +1,6 @@
 ///<reference path="node_modules/@types/jquery/index.d.ts" />
 
-
+//Deberia verse selecionada la fila que voy a modificar
 
 function CargarTabla()
 {
@@ -16,6 +16,7 @@ function CargarTabla()
     }).done(function(respuesta){
         if(respuesta.exito)
         {
+            let fila=0;
             let listaDias=respuesta.listaDias;
             let totalPublicaciones=0;
             let totalVideos=0;
@@ -30,7 +31,7 @@ function CargarTabla()
             html+='<tr><th></th><th>Nº</th><th>Fecha</th><th>Publicaciones</th><th>Videos</th><th>Horas</th>';
             html+='<th>Revisitas</th><th>Estudios</th><th>Modificar</th><th>Eliminar</th></tr>';
             listaDias.forEach(element => {
-                
+                fila++;
                 totalPublicaciones+=parseInt(element.publicaciones);
                 totalVideos+=parseInt(element.videos);
               //  hora.setHours(element.horas);  
@@ -38,7 +39,7 @@ function CargarTabla()
                 totalRevisitas+=parseInt(element.revisitas);
                 totalEstudios+=parseInt(element.estudios);
 
-                html+='<tr><td></td><td>'+element.id+'</td><td>'+element.fecha+'</td><td class="text-center">'+element.publicaciones+'</td>';
+                html+='<tr"><td></td><td>'+fila+'</td><td>'+element.fecha+'</td><td class="text-center">'+element.publicaciones+'</td>';
                 html+='<td class="text-center">'+element.videos+'</td>'+'<td>'+element.horas+'</td>';
                 html+='<td class="text-center">'+element.revisitas+'</td><td class="text-center">'+element.estudios+'</td>';    
                 html+="<td><input type='button' value='Modificar' class='btn btn-warning' onclick='Modificar("+JSON.stringify(element) +")'></td>";
@@ -96,7 +97,7 @@ function Modificar(elemento)
     $("#txtEstudios").val(elemento.estudios);
     $("#btnAgregar").val("Modificar");
     $("#btnAgregar").attr("onclick","Agregar('Modificar')");
-
+    AlertWarning("Cuidado!!! Linea nº "+elemento.id+" seleccionada para modificar");
 }
 
 //class=alert-dissmisable
@@ -110,5 +111,11 @@ function AlertSuccess(mensaje)
 function AlertDanger(mensaje)
 {
     let html='<div class="alert alert-danger alert-dissmisable">'+mensaje+'</div>';
+    $("#divAlert").html(html);
+}
+
+function AlertWarning(mensaje)
+{
+    let html='<div class="alert alert-warning alert-dissmisable">'+mensaje+'</div>';
     $("#divAlert").html(html);
 }

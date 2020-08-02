@@ -17,9 +17,9 @@ class Dia
     public $revisitas;
     public $estudios;
 
-    public function __construct($_fecha,$_publicaciones=0,$_videos=0,
+    public function __construct($_id,$_fecha,$_publicaciones=0,$_videos=0,
                                 $_horas=0,$_revisitas=0,$_estudios=0){
-    
+        $this->id=$_id;                                    
         $this->fecha=$_fecha;
         $this->publicaciones=$_publicaciones;
         $this->videos=$_videos;
@@ -220,7 +220,58 @@ class Dia
         return $response->withJson($retorno,$retorno->status);
     }
 
-    
+    public static function ModificarEnArchivoJSON($elemento)
+    {
+        $lista=self::TraerTodosJSON();
+        $nuevaLista=array();
+        $retorno=false;
+
+        foreach ($lista as $key => $i) {
+            
+            if($i->id==$elemento->id)
+            {
+                $retorno=true;
+                array_push($nuevaLista,$elemento);    
+                continue;
+            }
+            array_push($nuevaLista,$i);
+        }
+        if($retorno==true)
+        {
+            self::EscribirEnArchivoJSON($nuevaLista);
+        }
+
+        return $retorno;
+
+
+
+
+    }
+
+
+    public static function ModificarUno(Request $request,Response $response,$args)
+    {
+        $recibo=$request->getParsedBody();
+        $json=(object)$recibo["cadenaJson"];
+        $retorno= new stdClass();
+
+
+        if(self::ModificarEnArchivoJSON($json))
+        {
+            $retorno->exito=true;
+            $retorno->status=200;
+            $retorno->mensaje="Se a modificado exitosamente!!!";
+        }
+        else
+        {
+        
+            $retorno->exito=false;
+            $retorno->status=400;
+            $retorno->mensaje="No se a podido modificar";
+        }
+
+        return $response->withJson($retorno,$retorno->status);
+    }
 
 
 

@@ -1,4 +1,33 @@
 ///<reference path="node_modules/@types/jquery/index.d.ts" />
+function Agregar() {
+    var dia = {};
+    var pagina = "BACKEND/dia/agregar";
+    dia.fecha = $("#dateFecha").val();
+    dia.publicaciones = $("#txtPublicaciones").val();
+    dia.videos = $("#txtVideos").val();
+    dia.horas = $("#txtHoras").val();
+    dia.revisitas = $("#txtRevisitas").val();
+    dia.estudios = $("#txtEstudios").val();
+    var form = new FormData();
+    form.append("cadenaJson", JSON.stringify(dia));
+    $.ajax({
+        url: pagina,
+        type: "post",
+        data: form,
+        dataType: "json",
+        contentType: false,
+        processData: false,
+        async: true
+    }).done(function (respuesta) {
+        AlertSuccess(respuesta.mensaje);
+        CargarTabla();
+        ArmarAgregar();
+    }).fail(function (jqxhr) {
+        var respuesta = JSON.parse(jqxhr.responseText);
+        AlertDanger(respuesta.mensaje);
+    });
+}
+//Deberia verse selecionada la fila que voy a modificar
 function CargarTabla() {
     var pagina = "BACKEND/dia/traerTodos";
     $.ajax({
@@ -10,33 +39,35 @@ function CargarTabla() {
         async: true
     }).done(function (respuesta) {
         if (respuesta.exito) {
+            var fila_1 = 0;
             var listaDias = respuesta.listaDias;
             var totalPublicaciones_1 = 0;
             var totalVideos_1 = 0;
-            var totalHoras_1 = 0;
+            var totalHoras = 0;
             var totalRevisitas_1 = 0;
             var totalEstudios_1 = 0;
             var totalDias = listaDias.length;
-            var hora_1 = new Date();
+            // let hora= new Date();
             var html_1 = '<h1 >Mes Actual</h1>';
             html_1 += '<table class="table table-sm table-dark table-hover mt-3">';
             html_1 += '<tr><th></th><th>Nº</th><th>Fecha</th><th>Publicaciones</th><th>Videos</th><th>Horas</th>';
             html_1 += '<th>Revisitas</th><th>Estudios</th><th>Modificar</th><th>Eliminar</th></tr>';
             listaDias.forEach(function (element) {
+                fila_1++;
                 totalPublicaciones_1 += parseInt(element.publicaciones);
                 totalVideos_1 += parseInt(element.videos);
-                hora_1.setHours(element.horas);
-                totalHoras_1 += hora_1.getHours(); //lo unico que se me ocurre es agarrar las horas sumarlas todas y despues sumar todos los minutos y divirlos
+                //  hora.setHours(element.horas);  
+                //totalHoras+=hora.getHours();       //lo unico que se me ocurre es agarrar las horas sumarlas todas y despues sumar todos los minutos y divirlos
                 totalRevisitas_1 += parseInt(element.revisitas);
                 totalEstudios_1 += parseInt(element.estudios);
-                html_1 += '<tr><td></td><td>' + element.id + '</td><td>' + element.fecha + '</td><td class="text-center">' + element.publicaciones + '</td>';
+                html_1 += '<tr"><td></td><td>' + fila_1 + '</td><td>' + element.fecha + '</td><td class="text-center">' + element.publicaciones + '</td>';
                 html_1 += '<td class="text-center">' + element.videos + '</td>' + '<td>' + element.horas + '</td>';
                 html_1 += '<td class="text-center">' + element.revisitas + '</td><td class="text-center">' + element.estudios + '</td>';
-                html_1 += "<td><input type='button' value='Modificar' class='btn btn-warning' onclick='Modificar(" + JSON.stringify(element) + ")'></td>";
+                html_1 += "<td><input type='button' value='Modificar' class='btn btn-warning' onclick='ArmarModificar(" + JSON.stringify(element) + "," + fila_1 + ")'></td>";
                 html_1 += '<td><input type="button" value="Eliminar" class="btn btn-danger" onclick="Eliminar(' + element.id + ')"></td></tr>';
             });
             html_1 += '<tr><td>Total:</td><td class="text-left" colspan="2">' + totalDias + ' Dias</td><td class="text-center">' + totalPublicaciones_1 + '</td>';
-            html_1 += '<td class="text-center">' + totalVideos_1 + '</td><td class="text-center">' + totalHoras_1 + '</td>';
+            html_1 += '<td class="text-center">' + totalVideos_1 + '</td><td class="text-center">' + totalHoras + '</td>';
             html_1 += '<td class="text-center">' + totalRevisitas_1 + '</td><td class="text-center">' + totalEstudios_1 + '</td></tr></table>';
             $("#tablaMes").html(html_1);
         }
@@ -63,7 +94,45 @@ function Eliminar(id) {
         });
     }
 }
-function Modificar(elemento) {
+function Modificar(id) {
+    var dia = {};
+    var pagina = "BACKEND/dia/modificar";
+    dia.id = id;
+    dia.fecha = $("#dateFecha").val();
+    dia.publicaciones = $("#txtPublicaciones").val();
+    dia.videos = $("#txtVideos").val();
+    dia.horas = $("#txtHoras").val();
+    dia.revisitas = $("#txtRevisitas").val();
+    dia.estudios = $("#txtEstudios").val();
+    var json = { "cadenaJson": dia };
+    $.ajax({
+        url: pagina,
+        type: "put",
+        data: json,
+        dataType: "json",
+        // contentType:false,
+        // processData:false,
+        async: true
+    }).done(function (respuesta) {
+        AlertSuccess(respuesta.mensaje);
+        CargarTabla();
+        ArmarAgregar();
+    }).fail(function (jqxhr) {
+        var respuesta = JSON.parse(jqxhr.responseText);
+        AlertDanger(respuesta.mensaje);
+    });
+}
+function ArmarAgregar() {
+    $("#dateFecha").val("");
+    $("#txtPublicaciones").val("");
+    $("#txtVideos").val("");
+    $("#txtHoras").val("");
+    $("#txtRevisitas").val("");
+    $("#txtEstudios").val("");
+    $("#btnAgregar").val("Agregar");
+    $("#btnAgregar").attr("onclick", "Agregar()");
+}
+function ArmarModificar(elemento, fila) {
     $("#dateFecha").val(elemento.fecha);
     $("#txtPublicaciones").val(elemento.publicaciones);
     $("#txtVideos").val(elemento.videos);
@@ -71,7 +140,8 @@ function Modificar(elemento) {
     $("#txtRevisitas").val(elemento.revisitas);
     $("#txtEstudios").val(elemento.estudios);
     $("#btnAgregar").val("Modificar");
-    $("#btnAgregar").attr("onclick", "Agregar('Modificar')");
+    $("#btnAgregar").attr("onclick", "Modificar(" + elemento.id + ")");
+    AlertWarning("Cuidado!!! Fila nº " + fila + " seleccionada para modificar");
 }
 //class=alert-dissmisable
 function AlertSuccess(mensaje) {
@@ -82,32 +152,7 @@ function AlertDanger(mensaje) {
     var html = '<div class="alert alert-danger alert-dissmisable">' + mensaje + '</div>';
     $("#divAlert").html(html);
 }
-///<reference path="node_modules/@types/jquery/index.d.ts" />
-///<reference path="mes.ts"/>
-function Agregar(caso) {
-    var dia = {};
-    var pagina = "BACKEND/dia/agregar";
-    dia.fecha = $("#dateFecha").val();
-    dia.publicaciones = $("#txtPublicaciones").val();
-    dia.videos = $("#txtVideos").val();
-    dia.horas = $("#txtHoras").val();
-    dia.revisitas = $("#txtRevisitas").val();
-    dia.estudios = $("#txtEstudios").val();
-    var form = new FormData();
-    form.append("cadenaJson", JSON.stringify(dia));
-    $.ajax({
-        url: pagina,
-        type: "post",
-        data: form,
-        dataType: "json",
-        contentType: false,
-        processData: false,
-        async: true
-    }).done(function (respuesta) {
-        AlertSuccess(respuesta.mensaje);
-        CargarTabla();
-    }).fail(function (jqxhr) {
-        var respuesta = JSON.parse(jqxhr.responseText);
-        AlertDanger(respuesta.mensaje);
-    });
+function AlertWarning(mensaje) {
+    var html = '<div class="alert alert-warning alert-dissmisable">' + mensaje + '</div>';
+    $("#divAlert").html(html);
 }
