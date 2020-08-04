@@ -43,11 +43,12 @@ function CargarTabla() {
             var listaDias = respuesta.listaDias;
             var totalPublicaciones_1 = 0;
             var totalVideos_1 = 0;
-            var totalHoras = 0;
+            var acumuladorTime = new Date();
             var totalRevisitas_1 = 0;
             var totalEstudios_1 = 0;
             var totalDias = listaDias.length;
-            // let hora= new Date();
+            var aux = new Date();
+            var arrayHoras_1 = Array();
             var html_1 = '<h1 >Mes Actual</h1>';
             html_1 += '<table class="table table-sm table-dark table-hover mt-3">';
             html_1 += '<tr><th></th><th>Nº</th><th>Fecha</th><th>Publicaciones</th><th>Videos</th><th>Horas</th>';
@@ -56,8 +57,7 @@ function CargarTabla() {
                 fila_1++;
                 totalPublicaciones_1 += parseInt(element.publicaciones);
                 totalVideos_1 += parseInt(element.videos);
-                //  hora.setHours(element.horas);  
-                //totalHoras+=hora.getHours();       //lo unico que se me ocurre es agarrar las horas sumarlas todas y despues sumar todos los minutos y divirlos
+                arrayHoras_1.push(element.horas);
                 totalRevisitas_1 += parseInt(element.revisitas);
                 totalEstudios_1 += parseInt(element.estudios);
                 html_1 += '<tr"><td></td><td>' + fila_1 + '</td><td>' + element.fecha + '</td><td class="text-center">' + element.publicaciones + '</td>';
@@ -66,6 +66,7 @@ function CargarTabla() {
                 html_1 += "<td><input type='button' value='Modificar' class='btn btn-warning' onclick='ArmarModificar(" + JSON.stringify(element) + "," + fila_1 + ")'></td>";
                 html_1 += '<td><input type="button" value="Eliminar" class="btn btn-danger" onclick="Eliminar(' + element.id + ')"></td></tr>';
             });
+            var totalHoras = CalcularTotalHoras(arrayHoras_1);
             html_1 += '<tr><td>Total:</td><td class="text-left" colspan="2">' + totalDias + ' Dias</td><td class="text-center">' + totalPublicaciones_1 + '</td>';
             html_1 += '<td class="text-center">' + totalVideos_1 + '</td><td class="text-center">' + totalHoras + '</td>';
             html_1 += '<td class="text-center">' + totalRevisitas_1 + '</td><td class="text-center">' + totalEstudios_1 + '</td></tr></table>';
@@ -74,6 +75,31 @@ function CargarTabla() {
     }).fail(function (jqxhr) {
         console.log(jqxhr.responseText);
     });
+}
+function CalcularTotalHoras(arrayHoras) {
+    var aux = new Date();
+    aux.setHours(0, 0);
+    var horas = 0;
+    var minutos = 0;
+    var retorno = "00:00";
+    horas = arrayHoras.map(function (element, index, array) {
+        return parseInt(element.split(":")[0]);
+    }).reduce(function (anterior, siguiente, index, array) {
+        return anterior + siguiente;
+    });
+    minutos = arrayHoras.map(function (element, index, array) {
+        return parseInt(element.split(":")[1]);
+    }).reduce(function (anterior, siguiente, index, array) {
+        return anterior + siguiente;
+    });
+    aux.setMinutes(minutos);
+    if (aux.getMinutes().toString().length == 1) {
+        retorno = horas + aux.getHours() + ":0" + aux.getMinutes();
+    }
+    else {
+        retorno = horas + aux.getHours() + ":" + aux.getMinutes();
+    }
+    return retorno;
 }
 //Cambiar confirm por ventana Modal
 function Eliminar(id) {

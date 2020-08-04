@@ -1,5 +1,8 @@
 ///<reference path="node_modules/@types/jquery/index.d.ts" />
 
+
+
+
 function Agregar()
 {
     let dia:any={};
@@ -11,7 +14,6 @@ function Agregar()
     dia.horas=$("#txtHoras").val();
     dia.revisitas=$("#txtRevisitas").val();
     dia.estudios=$("#txtEstudios").val();
-
 
     let form = new FormData();
     form.append("cadenaJson",JSON.stringify(dia));
@@ -57,11 +59,15 @@ function CargarTabla()
             let listaDias=respuesta.listaDias;
             let totalPublicaciones=0;
             let totalVideos=0;
-            let totalHoras=0;
+            let acumuladorTime=new Date();
             let totalRevisitas=0;
             let totalEstudios=0;
-            let totalDias=listaDias.length;            
-           // let hora= new Date();
+            let totalDias=listaDias.length;
+            let aux=new Date();            
+            let arrayHoras=Array();
+           
+            
+
             
             let html='<h1 >Mes Actual</h1>';
             html+='<table class="table table-sm table-dark table-hover mt-3">';
@@ -71,8 +77,7 @@ function CargarTabla()
                 fila++;
                 totalPublicaciones+=parseInt(element.publicaciones);
                 totalVideos+=parseInt(element.videos);
-              //  hora.setHours(element.horas);  
-                //totalHoras+=hora.getHours();       //lo unico que se me ocurre es agarrar las horas sumarlas todas y despues sumar todos los minutos y divirlos
+                arrayHoras.push(element.horas);
                 totalRevisitas+=parseInt(element.revisitas);
                 totalEstudios+=parseInt(element.estudios);
 
@@ -82,6 +87,7 @@ function CargarTabla()
                 html+="<td><input type='button' value='Modificar' class='btn btn-warning' onclick='ArmarModificar("+JSON.stringify(element) +","+fila+")'></td>";
                 html+='<td><input type="button" value="Eliminar" class="btn btn-danger" onclick="Eliminar('+element.id+')"></td></tr>';
             });
+            let totalHoras=CalcularTotalHoras(arrayHoras);
             html+='<tr><td>Total:</td><td class="text-left" colspan="2">'+totalDias+' Dias</td><td class="text-center">'+totalPublicaciones+'</td>';
             html+='<td class="text-center">'+totalVideos+'</td><td class="text-center">'+totalHoras+'</td>';
             html+='<td class="text-center">'+totalRevisitas+'</td><td class="text-center">'+totalEstudios+'</td></tr></table>';
@@ -96,6 +102,40 @@ function CargarTabla()
     });
     
 }
+
+function CalcularTotalHoras(arrayHoras)
+{
+    let aux=new Date();
+        aux.setHours(0,0);
+    let horas=0;
+    let minutos=0;
+    let retorno="00:00";
+
+    horas=arrayHoras.map(function(element,index,array){
+        return parseInt(element.split(":")[0]);
+    }).reduce(function(anterior,siguiente,index,array){
+        return anterior+ siguiente;
+    });
+
+    minutos=arrayHoras.map(function(element,index,array){
+        return parseInt(element.split(":")[1]);
+    }).reduce(function(anterior,siguiente,index,array){
+        return anterior+ siguiente;
+    });
+
+    aux.setMinutes(minutos);
+    if(aux.getMinutes().toString().length==1)
+    {
+        retorno=horas+aux.getHours() + ":0" + aux.getMinutes();
+    }
+    else
+    {
+        retorno=horas+aux.getHours() + ":" + aux.getMinutes();
+    }
+
+    return retorno;
+}
+
 
 //Cambiar confirm por ventana Modal
 
@@ -183,8 +223,20 @@ function ArmarModificar(elemento,fila)
     AlertWarning("Cuidado!!! Fila nº "+fila+" seleccionada para modificar");
 }
 
-//class=alert-dissmisable
+function AdministrarValidaciones(dia)
+{
+    dia.fecha=$("#dateFecha").val();
+    dia.publicaciones=$("#txtPublicaciones").val();
+    dia.videos=$("#txtVideos").val();
+    dia.horas=$("#txtHoras").val();
+    dia.revisitas=$("#txtRevisitas").val();
+    dia.estudios=$("#txtEstudios").val();
 
+}
+
+
+//#region Alerts
+//class=alert-dissmisable
 function AlertSuccess(mensaje)
 {
     let html='<div class="alert alert-success">'+mensaje+'</div>';
@@ -202,3 +254,4 @@ function AlertWarning(mensaje)
     let html='<div class="alert alert-warning alert-dissmisable">'+mensaje+'</div>';
     $("#divAlert").html(html);
 }
+//#endregion

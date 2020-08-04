@@ -212,6 +212,7 @@ class Dia
         }
         else 
         {
+            
             $retorno->status=400;
             $retorno->exito=false;
             $retorno->mensaje="No se a podido eliminar";

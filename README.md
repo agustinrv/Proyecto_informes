@@ -11,3 +11,6 @@ Quizas mas adelante puedo agregarle funcionalidad para que se pueda usar para re
 
 los formularios deberian conservar su tamaño sin importar el tamaño de los dispositivos ,la idea 
 es que al achicar la pantalla la tabla pase a estar abajo
+
+
+Agregar validaciones y meses.Las validaciones se haran con boostrap
