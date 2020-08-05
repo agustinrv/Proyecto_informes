@@ -8,24 +8,27 @@ function Agregar() {
     dia.horas = $("#txtHoras").val();
     dia.revisitas = $("#txtRevisitas").val();
     dia.estudios = $("#txtEstudios").val();
-    var form = new FormData();
-    form.append("cadenaJson", JSON.stringify(dia));
-    $.ajax({
-        url: pagina,
-        type: "post",
-        data: form,
-        dataType: "json",
-        contentType: false,
-        processData: false,
-        async: true
-    }).done(function (respuesta) {
-        AlertSuccess(respuesta.mensaje);
-        CargarTabla();
-        ArmarAgregar();
-    }).fail(function (jqxhr) {
-        var respuesta = JSON.parse(jqxhr.responseText);
-        AlertDanger(respuesta.mensaje);
-    });
+    if (AdministrarValidaciones(dia)) {
+        var form = new FormData();
+        form.append("cadenaJson", JSON.stringify(dia));
+        $.ajax({
+            url: pagina,
+            type: "post",
+            data: form,
+            dataType: "json",
+            contentType: false,
+            processData: false,
+            async: true
+        }).done(function (respuesta) {
+            AlertSuccess(respuesta.mensaje);
+            CargarTabla();
+            ArmarAgregar();
+        }).fail(function (jqxhr) {
+            console.log(jqxhr.responseText);
+            var respuesta = JSON.parse(jqxhr.responseText);
+            AlertDanger(respuesta.mensaje);
+        });
+    }
 }
 //Deberia verse selecionada la fila que voy a modificar
 function CargarTabla() {
@@ -152,7 +155,7 @@ function ArmarAgregar() {
     $("#dateFecha").val("");
     $("#txtPublicaciones").val("");
     $("#txtVideos").val("");
-    $("#txtHoras").val("");
+    $("#txtHoras").val("00:00");
     $("#txtRevisitas").val("");
     $("#txtEstudios").val("");
     $("#btnAgregar").val("Agregar");
@@ -167,8 +170,27 @@ function ArmarModificar(elemento, fila) {
     $("#txtEstudios").val(elemento.estudios);
     $("#btnAgregar").val("Modificar");
     $("#btnAgregar").attr("onclick", "Modificar(" + elemento.id + ")");
-    AlertWarning("Cuidado!!! Fila nº " + fila + " seleccionada para modificar");
+    AlertWarning("<strong>Cuidado!!!</strong> Fila nº " + fila + " seleccionada para modificar");
 }
+function AdministrarValidaciones(dia) {
+    var flagFecha = true;
+    var flagHoras = true;
+    var retorno = false;
+    if (dia.fecha.length == 0) {
+        flagFecha = false;
+    }
+    if (dia.horas.length == 0 || dia.horas == "00:00") {
+        flagHoras = false;
+    }
+    if (!flagFecha || !flagHoras) {
+        AlertDanger("<strong>Error!!!</strong> Los campos fecha y horas son obligatorios");
+    }
+    else {
+        retorno = true;
+    }
+    return retorno;
+}
+//#region Alerts
 //class=alert-dissmisable
 function AlertSuccess(mensaje) {
     var html = '<div class="alert alert-success">' + mensaje + '</div>';
@@ -182,3 +204,4 @@ function AlertWarning(mensaje) {
     var html = '<div class="alert alert-warning alert-dissmisable">' + mensaje + '</div>';
     $("#divAlert").html(html);
 }
+//#endregion

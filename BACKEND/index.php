@@ -18,7 +18,8 @@ $app = new \Slim\App(["settings" => $config]);
 
 $app->group("/dia",function(){
 
-    $this->post("/agregar",\Dia::class . "::AgregarUno");
+    $this->post("/agregar",\Dia::class . "::AgregarUno")->add(
+                           \Dia::class . "::ValidarFechaYHora");
     $this->get("/traerTodos",\Dia::class . "::TraerTodos");
     $this->delete("/borrar",\Dia::class . "::BorrarUno");
     $this->put("/modificar",\Dia::class . "::ModificarUno");

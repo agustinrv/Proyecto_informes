@@ -17,9 +17,9 @@ class Dia
     public $revisitas;
     public $estudios;
 
-    public function __construct($_id,$_fecha,$_publicaciones=0,$_videos=0,
-                                $_horas=0,$_revisitas=0,$_estudios=0){
-        $this->id=$_id;                                    
+    public function __construct($_fecha,$_horas,$_publicaciones=0,$_videos=0,
+                                $_revisitas=0,$_estudios=0){
+        $this->id=self::GenerarID();                                  
         $this->fecha=$_fecha;
         $this->publicaciones=$_publicaciones;
         $this->videos=$_videos;
@@ -83,9 +83,12 @@ class Dia
     public static function AgregarUno(Request $request,Response $response,$args)
     {   
         $recibo=$request->getParsedBody();
+        
         $json=json_decode($recibo["cadenaJson"]);
         $json->id= self::GenerarID();
+
         $retorno= new stdClass();
+        $json=self::ValidarCamposVacios($json);
 
         if(self::AgregarEnArchivoJSON($json))
         {
@@ -102,6 +105,49 @@ class Dia
         }
 
         return $response->withJson($retorno,$retorno->status);
+    }
+
+    public static function ValidarCamposVacios($json)
+    {
+        if(empty($json->publicaciones))
+        {
+            $json->publicaciones=0;
+        }
+        if(empty($json->videos))
+        {
+            $json->videos=0;
+        }
+        if(empty($json->revisitas))
+        {
+            $json->revisitas=0;
+        }
+        if(empty($json->estudios))
+        {
+            $json->estudios=0;
+        }
+        return $json;
+    }
+
+    public static function ValidarFechaYHora(Request $request,Response $response,$next)
+    {
+        $recibo=$request->getParsedBody();
+        $json=json_decode($recibo["cadenaJson"]);
+        
+        $retorno=new stdClass();
+
+        if(empty($json->fecha) || empty($json->horas))
+        {
+            $retorno->mensaje="<strong>Error!!!</strong>,la fecha y la hora son obligatorias";
+            $retorno->status=418;
+            $retorno->exito=false;
+            $response=$response->withJson($retorno,$retorno->status);
+        }
+        else
+        {
+            $response=$next($request,$response);
+        }
+
+        return $response;
     }
 
 

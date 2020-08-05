@@ -52,11 +52,12 @@
         <div class="col-4">
             <div class="container mt-5 " >
                 <h1 style="padding-top: 2%;">Informe</h1>
-                <form action="" class=" form-control" style="height: 400px; background-color: lightgrey;">
-                <div class="row form-group">
+                <form action="" class="form-control " style="height: 400px; background-color: lightgrey;">
+                <div class="row form-group was-validated">
                     <div class="col-1 mt-3 mr-4"><label for="dateFecha" class="h6">Fecha</label></div>
                     <div class="mt-3 ml-4"><label for="dateFecha" class="fas fa-calendar-alt"></label></div>
-                    <div class="col mt-2"><input type="date" id="dateFecha" class="form-control" placeholder="Fecha"></div>
+                    <div class="col mt-2"><input type="date" id="dateFecha" class="form-control" required placeholder="Fecha"></div>
+                    <div class="invalid-feedback">Valor requerido.</div>
                 </div>
 
                 <div class="row form-group">
@@ -68,13 +69,14 @@
                 <div class="row form-group">
                     <div class="col-1 mt-1 mr-4"><label for="txtVideos" class="h6">Videos</label></div>
                     <div class="ml-4 mt-1"><label for="txtVideos" class="fas fa-video"></label></div>
-                    <div class="col"><input type="number" id="txtVideos" class="form-control" min="0" placeholder="Videos"></div>
+                    <div class="col"><input type="text" id="txtVideos" class="form-control" min="0" placeholder="Videos"></div>
+                    
                 </div>
 
-                <div class="row form-group">
+                <div class="row form-group ">
                     <div class="col-1 mt-1 mr-4"><label for="txtHoras" class="h6">Horas</label></div>
                     <div class="ml-4 mt-1"><label for="txtHoras" class="fas fa-clock"></label></div>
-                    <div class="col"><input type="time" id="txtHoras" value="00:00"  class="form-control"  placeholder="Horas"></div>
+                    <div class="col"><input type="time" id="txtHoras" value="00:00" class="form-control" placeholder="Horas"></div>
                 </div>
 
                 <div class="row form-group">

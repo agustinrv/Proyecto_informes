@@ -15,26 +15,31 @@ function Agregar()
     dia.revisitas=$("#txtRevisitas").val();
     dia.estudios=$("#txtEstudios").val();
 
-    let form = new FormData();
-    form.append("cadenaJson",JSON.stringify(dia));
+    if(AdministrarValidaciones(dia))
+    {
+        let form = new FormData();
+        form.append("cadenaJson",JSON.stringify(dia));
 
-    $.ajax({
-        url:pagina,
-        type:"post",
-        data:form,
-        dataType:"json",
-        contentType:false,
-        processData:false,
-        async:true
-    }).done(function(respuesta){
-        AlertSuccess(respuesta.mensaje);
-        CargarTabla();
-        ArmarAgregar();
-    }).fail(function(jqxhr){
-        let respuesta=JSON.parse(jqxhr.responseText);
+        $.ajax({
+            url:pagina,
+            type:"post",
+            data:form,
+            dataType:"json",
+            contentType:false,
+            processData:false,
+            async:true
+        }).done(function(respuesta){
+            AlertSuccess(respuesta.mensaje);
+            CargarTabla();
+            ArmarAgregar();
+        }).fail(function(jqxhr){
+            console.log(jqxhr.responseText);
+            let respuesta=JSON.parse(jqxhr.responseText);
+            AlertDanger(respuesta.mensaje);
+        });
+    }
 
-        AlertDanger(respuesta.mensaje);
-    });
+    
     
 }
 
@@ -44,7 +49,6 @@ function Agregar()
 function CargarTabla()
 {
     let pagina="BACKEND/dia/traerTodos";
-
     $.ajax({
         url:pagina,
         type:"get",
@@ -199,11 +203,11 @@ function Modificar(id)
 }
 
 function ArmarAgregar()
-{
+{    
     $("#dateFecha").val("");
     $("#txtPublicaciones").val("");
     $("#txtVideos").val("");
-    $("#txtHoras").val("");
+    $("#txtHoras").val("00:00");
     $("#txtRevisitas").val("");
     $("#txtEstudios").val("");
     $("#btnAgregar").val("Agregar");
@@ -220,18 +224,37 @@ function ArmarModificar(elemento,fila)
     $("#txtEstudios").val(elemento.estudios);
     $("#btnAgregar").val("Modificar");
     $("#btnAgregar").attr("onclick","Modificar("+elemento.id+")");
-    AlertWarning("Cuidado!!! Fila nº "+fila+" seleccionada para modificar");
+    AlertWarning("<strong>Cuidado!!!</strong> Fila nº "+fila+" seleccionada para modificar");
 }
 
 function AdministrarValidaciones(dia)
 {
-    dia.fecha=$("#dateFecha").val();
-    dia.publicaciones=$("#txtPublicaciones").val();
-    dia.videos=$("#txtVideos").val();
-    dia.horas=$("#txtHoras").val();
-    dia.revisitas=$("#txtRevisitas").val();
-    dia.estudios=$("#txtEstudios").val();
+    let flagFecha=true;
+    let flagHoras=true;
+    let retorno=false;
+    
+    
 
+    if(dia.fecha.length==0)
+    {
+        flagFecha=false;
+    }
+
+    if(dia.horas.length==0 || dia.horas=="00:00")
+    {
+        flagHoras=false;
+    }
+
+    if(!flagFecha || !flagHoras)
+    {
+        AlertDanger("<strong>Error!!!</strong> Los campos fecha y horas son obligatorios");
+    }
+    else
+    {
+        retorno=true;
+    }
+
+    return retorno;
 }
 
 
