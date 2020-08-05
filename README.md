@@ -13,4 +13,4 @@ los formularios deberian conservar su tamaño sin importar el tamaño de los dis
 es que al achicar la pantalla la tabla pase a estar abajo
 
 
-Agregar meses
+Agregar meses y años. La pagina principal probablemente no sea la que esta ahora

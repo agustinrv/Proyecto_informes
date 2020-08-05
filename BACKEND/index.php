@@ -26,6 +26,15 @@ $app->group("/dia",function(){
                             \Dia::class . "::ValidarFechaYHora");
 });
 
+$app->group("/mes",function(){
+
+    $this->post("/agregar",\Mes::class . "::AgregarUno");
+    $this->get("/traerTodos",\Mes::class . "::TraerTodos");
+    $this->delete("/borrar",\Mes::class . "::BorrarUno");
+    $this->put("/modificar",\Mes::class . "::ModificarUno")->add(
+                            \Mes::class . "::ValidarFechaYHora");
+});
+
 $app->run();
 
 

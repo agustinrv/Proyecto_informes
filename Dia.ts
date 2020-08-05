@@ -71,8 +71,8 @@ function CargarTabla()
             total.estudios=0;
            
             
-            let html='<h1 >Mes Actual</h1> ';
-            html+='<table class="table table-sm table-dark table-hover mt-3">';
+            let html='<h1 style="padding-top: 2%;">Mes Actual</h1> ';
+            html+='<table class="table table-sm table-dark table-hover">';
             html+='<tr><th></th><th>Nº</th><th>Fecha</th><th>Publicaciones</th><th>Videos</th><th>Horas</th>';
             html+='<th>Revisitas</th><th>Estudios</th><th>Modificar</th><th>Eliminar</th></tr>';
             listaDias.forEach(element => {

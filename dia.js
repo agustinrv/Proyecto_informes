@@ -51,8 +51,8 @@ function CargarTabla() {
             total_1.videos = 0;
             total_1.revisitas = 0;
             total_1.estudios = 0;
-            var html_1 = '<h1 >Mes Actual</h1> ';
-            html_1 += '<table class="table table-sm table-dark table-hover mt-3">';
+            var html_1 = '<h1 style="padding-top: 2%;">Mes Actual</h1> ';
+            html_1 += '<table class="table table-sm table-dark table-hover">';
             html_1 += '<tr><th></th><th>Nº</th><th>Fecha</th><th>Publicaciones</th><th>Videos</th><th>Horas</th>';
             html_1 += '<th>Revisitas</th><th>Estudios</th><th>Modificar</th><th>Eliminar</th></tr>';
             listaDias.forEach(function (element) {
