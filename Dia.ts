@@ -180,26 +180,30 @@ function Modificar(id)
     dia.revisitas=$("#txtRevisitas").val();
     dia.estudios=$("#txtEstudios").val();
     
+    if(AdministrarValidaciones(dia))
+    {
+        let json={"cadenaJson":dia}
 
-    let json={"cadenaJson":dia}
+        $.ajax({
+            url:pagina,
+            type:"put",
+            data:json,
+            dataType:"json",
+        // contentType:false,
+        // processData:false,
+            async:true
+        }).done(function(respuesta){
+            AlertSuccess(respuesta.mensaje);
+            CargarTabla();
+            ArmarAgregar();
+        }).fail(function(jqxhr){
+            let respuesta=JSON.parse(jqxhr.responseText);
+            AlertDanger(respuesta.mensaje);
 
-    $.ajax({
-        url:pagina,
-        type:"put",
-        data:json,
-        dataType:"json",
-       // contentType:false,
-       // processData:false,
-        async:true
-    }).done(function(respuesta){
-        AlertSuccess(respuesta.mensaje);
-        CargarTabla();
-        ArmarAgregar();
-    }).fail(function(jqxhr){
-        let respuesta=JSON.parse(jqxhr.responseText);
-        AlertDanger(respuesta.mensaje);
+        });
+    }
 
-    });
+    
 }
 
 function ArmarAgregar()

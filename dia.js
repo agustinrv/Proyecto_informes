@@ -133,23 +133,25 @@ function Modificar(id) {
     dia.horas = $("#txtHoras").val();
     dia.revisitas = $("#txtRevisitas").val();
     dia.estudios = $("#txtEstudios").val();
-    var json = { "cadenaJson": dia };
-    $.ajax({
-        url: pagina,
-        type: "put",
-        data: json,
-        dataType: "json",
-        // contentType:false,
-        // processData:false,
-        async: true
-    }).done(function (respuesta) {
-        AlertSuccess(respuesta.mensaje);
-        CargarTabla();
-        ArmarAgregar();
-    }).fail(function (jqxhr) {
-        var respuesta = JSON.parse(jqxhr.responseText);
-        AlertDanger(respuesta.mensaje);
-    });
+    if (AdministrarValidaciones(dia)) {
+        var json = { "cadenaJson": dia };
+        $.ajax({
+            url: pagina,
+            type: "put",
+            data: json,
+            dataType: "json",
+            // contentType:false,
+            // processData:false,
+            async: true
+        }).done(function (respuesta) {
+            AlertSuccess(respuesta.mensaje);
+            CargarTabla();
+            ArmarAgregar();
+        }).fail(function (jqxhr) {
+            var respuesta = JSON.parse(jqxhr.responseText);
+            AlertDanger(respuesta.mensaje);
+        });
+    }
 }
 function ArmarAgregar() {
     $("#dateFecha").val("");

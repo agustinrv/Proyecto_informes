@@ -131,7 +131,14 @@ class Dia
     public static function ValidarFechaYHora(Request $request,Response $response,$next)
     {
         $recibo=$request->getParsedBody();
-        $json=json_decode($recibo["cadenaJson"]);
+        if($request->isPost())
+        {
+            $json=json_decode($recibo["cadenaJson"]);
+        }
+        else
+        {
+            $json=(object)$recibo["cadenaJson"];
+        }
         
         $retorno=new stdClass();
 
@@ -246,7 +253,7 @@ class Dia
     public static function BorrarUno(Request $request,Response $response,$args)
     {
         $recibo=$request->getParsedBody();
-        
+         
         $id=$recibo["id"];
         $retorno=new stdClass();        
 
@@ -301,7 +308,7 @@ class Dia
         $recibo=$request->getParsedBody();
         $json=(object)$recibo["cadenaJson"];
         $retorno= new stdClass();
-
+        $json=self::ValidarCamposVacios($json);
 
         if(self::ModificarEnArchivoJSON($json))
         {
