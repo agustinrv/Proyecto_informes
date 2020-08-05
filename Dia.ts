@@ -61,29 +61,27 @@ function CargarTabla()
         {
             let fila=0;
             let listaDias=respuesta.listaDias;
-            let totalPublicaciones=0;
-            let totalVideos=0;
-            let acumuladorTime=new Date();
-            let totalRevisitas=0;
-            let totalEstudios=0;
-            let totalDias=listaDias.length;
-            let aux=new Date();            
+            let total:any={};
             let arrayHoras=Array();
+
+            total.dias=listaDias.length;
+            total.publicaciones=0;
+            total.videos=0;
+            total.revisitas=0;
+            total.estudios=0;
            
             
-
-            
-            let html='<h1 >Mes Actual</h1>';
+            let html='<h1 >Mes Actual</h1> ';
             html+='<table class="table table-sm table-dark table-hover mt-3">';
             html+='<tr><th></th><th>Nº</th><th>Fecha</th><th>Publicaciones</th><th>Videos</th><th>Horas</th>';
             html+='<th>Revisitas</th><th>Estudios</th><th>Modificar</th><th>Eliminar</th></tr>';
             listaDias.forEach(element => {
                 fila++;
-                totalPublicaciones+=parseInt(element.publicaciones);
-                totalVideos+=parseInt(element.videos);
+                total.publicaciones+=parseInt(element.publicaciones);
+                total.videos+=parseInt(element.videos);
                 arrayHoras.push(element.horas);
-                totalRevisitas+=parseInt(element.revisitas);
-                totalEstudios+=parseInt(element.estudios);
+                total.revisitas+=parseInt(element.revisitas);
+                total.estudios+=parseInt(element.estudios);
 
                 html+='<tr"><td></td><td>'+fila+'</td><td>'+element.fecha+'</td><td class="text-center">'+element.publicaciones+'</td>';
                 html+='<td class="text-center">'+element.videos+'</td>'+'<td>'+element.horas+'</td>';
@@ -91,13 +89,20 @@ function CargarTabla()
                 html+="<td><input type='button' value='Modificar' class='btn btn-warning' onclick='ArmarModificar("+JSON.stringify(element) +","+fila+")'></td>";
                 html+='<td><input type="button" value="Eliminar" class="btn btn-danger" onclick="Eliminar('+element.id+')"></td></tr>';
             });
-            let totalHoras=CalcularTotalHoras(arrayHoras);
-            html+='<tr><td>Total:</td><td class="text-left" colspan="2">'+totalDias+' Dias</td><td class="text-center">'+totalPublicaciones+'</td>';
-            html+='<td class="text-center">'+totalVideos+'</td><td class="text-center">'+totalHoras+'</td>';
-            html+='<td class="text-center">'+totalRevisitas+'</td><td class="text-center">'+totalEstudios+'</td></tr></table>';
-          
-           
+            total.horas=CalcularTotalHoras(arrayHoras);
+            html+='<tr><td>Total:</td><td class="text-left" colspan="2">'+total.dias+' Dias</td><td class="text-center">'+total.publicaciones+'</td>';
+            html+='<td class="text-center">'+total.videos+'</td><td class="text-center">'+total.horas+'</td>';
+            html+='<td class="text-center">'+total.revisitas+'</td><td class="text-center">'+total.estudios+'</td></tr></table>';            
+            html+='<input type="button" value="Generar Informe" class="btn btn-primary" id="btnInforme">';
+            html+='<div id="divInforme" class="mt-2"></div>';
+
             $("#tablaMes").html(html);
+            $("#btnInforme").attr("onclick","GenerarInforme("+JSON.stringify(total)+")");
+            //GenerarInforme(total);
+
+
+
+            
         }
 
 
@@ -106,6 +111,38 @@ function CargarTabla()
     });
     
 }
+function GenerarInforme(total)
+{
+   // total=JSON.parse(total);
+   console.log(total);
+    total.minutos=total.horas.split(":")[1];
+    total.horas=total.horas.split(":")[0];
+
+    if(total.minutos=="00")
+    {
+        AlertInforme("Informe: "+"</br>"+
+        "Publicaciones: " +  total.publicaciones + "</br>"+
+        "Videos: " + total.videos + "</br>"+
+        "Horas: " + total.horas + "</br>"+
+        "Revisitas: " + total.revisitas + "</br>"+
+        "Estudios: " + total.estudios);
+    }
+    else
+    {
+        AlertInforme("Informe: "+"</br>"+
+        "Publicaciones: " +  total.publicaciones + "</br>"+
+        "Videos: " + total.videos + "</br>"+
+        "Horas: " + total.horas + "</br>"+
+        "Revisitas: " + total.revisitas + "</br>"+
+        "Estudios: " + total.estudios+"</br>"+"</br>"+
+        "Le han sobrado "+total.minutos + "min.");
+    }
+    
+                
+
+    
+}
+
 
 function CalcularTotalHoras(arrayHoras)
 {
@@ -281,4 +318,12 @@ function AlertWarning(mensaje)
     let html='<div class="alert alert-warning alert-dissmisable">'+mensaje+'</div>';
     $("#divAlert").html(html);
 }
+
+function AlertInforme(mensaje)
+{
+    let html='<div class="alert alert-info alert-dissmisable">'+mensaje+'</div>';
+    $("#divInforme").html(html);
+}
+
+
 //#endregion

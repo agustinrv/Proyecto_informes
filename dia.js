@@ -44,40 +44,66 @@ function CargarTabla() {
         if (respuesta.exito) {
             var fila_1 = 0;
             var listaDias = respuesta.listaDias;
-            var totalPublicaciones_1 = 0;
-            var totalVideos_1 = 0;
-            var acumuladorTime = new Date();
-            var totalRevisitas_1 = 0;
-            var totalEstudios_1 = 0;
-            var totalDias = listaDias.length;
-            var aux = new Date();
+            var total_1 = {};
             var arrayHoras_1 = Array();
-            var html_1 = '<h1 >Mes Actual</h1>';
+            total_1.dias = listaDias.length;
+            total_1.publicaciones = 0;
+            total_1.videos = 0;
+            total_1.revisitas = 0;
+            total_1.estudios = 0;
+            var html_1 = '<h1 >Mes Actual</h1> ';
             html_1 += '<table class="table table-sm table-dark table-hover mt-3">';
             html_1 += '<tr><th></th><th>Nº</th><th>Fecha</th><th>Publicaciones</th><th>Videos</th><th>Horas</th>';
             html_1 += '<th>Revisitas</th><th>Estudios</th><th>Modificar</th><th>Eliminar</th></tr>';
             listaDias.forEach(function (element) {
                 fila_1++;
-                totalPublicaciones_1 += parseInt(element.publicaciones);
-                totalVideos_1 += parseInt(element.videos);
+                total_1.publicaciones += parseInt(element.publicaciones);
+                total_1.videos += parseInt(element.videos);
                 arrayHoras_1.push(element.horas);
-                totalRevisitas_1 += parseInt(element.revisitas);
-                totalEstudios_1 += parseInt(element.estudios);
+                total_1.revisitas += parseInt(element.revisitas);
+                total_1.estudios += parseInt(element.estudios);
                 html_1 += '<tr"><td></td><td>' + fila_1 + '</td><td>' + element.fecha + '</td><td class="text-center">' + element.publicaciones + '</td>';
                 html_1 += '<td class="text-center">' + element.videos + '</td>' + '<td>' + element.horas + '</td>';
                 html_1 += '<td class="text-center">' + element.revisitas + '</td><td class="text-center">' + element.estudios + '</td>';
                 html_1 += "<td><input type='button' value='Modificar' class='btn btn-warning' onclick='ArmarModificar(" + JSON.stringify(element) + "," + fila_1 + ")'></td>";
                 html_1 += '<td><input type="button" value="Eliminar" class="btn btn-danger" onclick="Eliminar(' + element.id + ')"></td></tr>';
             });
-            var totalHoras = CalcularTotalHoras(arrayHoras_1);
-            html_1 += '<tr><td>Total:</td><td class="text-left" colspan="2">' + totalDias + ' Dias</td><td class="text-center">' + totalPublicaciones_1 + '</td>';
-            html_1 += '<td class="text-center">' + totalVideos_1 + '</td><td class="text-center">' + totalHoras + '</td>';
-            html_1 += '<td class="text-center">' + totalRevisitas_1 + '</td><td class="text-center">' + totalEstudios_1 + '</td></tr></table>';
+            total_1.horas = CalcularTotalHoras(arrayHoras_1);
+            html_1 += '<tr><td>Total:</td><td class="text-left" colspan="2">' + total_1.dias + ' Dias</td><td class="text-center">' + total_1.publicaciones + '</td>';
+            html_1 += '<td class="text-center">' + total_1.videos + '</td><td class="text-center">' + total_1.horas + '</td>';
+            html_1 += '<td class="text-center">' + total_1.revisitas + '</td><td class="text-center">' + total_1.estudios + '</td></tr></table>';
+            html_1 += '<input type="button" value="Generar Informe" class="btn btn-primary" id="btnInforme">';
+            html_1 += '<div id="divInforme" class="mt-2"></div>';
             $("#tablaMes").html(html_1);
+            $("#btnInforme").attr("onclick", "GenerarInforme(" + JSON.stringify(total_1) + ")");
+            //GenerarInforme(total);
         }
     }).fail(function (jqxhr) {
         console.log(jqxhr.responseText);
     });
+}
+function GenerarInforme(total) {
+    // total=JSON.parse(total);
+    console.log(total);
+    total.minutos = total.horas.split(":")[1];
+    total.horas = total.horas.split(":")[0];
+    if (total.minutos == "00") {
+        AlertInforme("Informe: " + "</br>" +
+            "Publicaciones: " + total.publicaciones + "</br>" +
+            "Videos: " + total.videos + "</br>" +
+            "Horas: " + total.horas + "</br>" +
+            "Revisitas: " + total.revisitas + "</br>" +
+            "Estudios: " + total.estudios);
+    }
+    else {
+        AlertInforme("Informe: " + "</br>" +
+            "Publicaciones: " + total.publicaciones + "</br>" +
+            "Videos: " + total.videos + "</br>" +
+            "Horas: " + total.horas + "</br>" +
+            "Revisitas: " + total.revisitas + "</br>" +
+            "Estudios: " + total.estudios + "</br>" + "</br>" +
+            "Le han sobrado " + total.minutos + "min.");
+    }
 }
 function CalcularTotalHoras(arrayHoras) {
     var aux = new Date();
@@ -205,5 +231,9 @@ function AlertDanger(mensaje) {
 function AlertWarning(mensaje) {
     var html = '<div class="alert alert-warning alert-dissmisable">' + mensaje + '</div>';
     $("#divAlert").html(html);
+}
+function AlertInforme(mensaje) {
+    var html = '<div class="alert alert-info alert-dissmisable">' + mensaje + '</div>';
+    $("#divInforme").html(html);
 }
 //#endregion
