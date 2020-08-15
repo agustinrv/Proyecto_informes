@@ -17,6 +17,8 @@ class Dia
     public $revisitas;
     public $estudios;
 
+    
+
     public function __construct($_fecha,$_horas,$_publicaciones=0,$_videos=0,
                                 $_revisitas=0,$_estudios=0){
         $this->id=self::GenerarID();                                  

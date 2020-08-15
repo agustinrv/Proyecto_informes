@@ -14,3 +14,5 @@ es que al achicar la pantalla la tabla pase a estar abajo
 
 
 Agregar meses y años. La pagina principal probablemente no sea la que esta ahora
+
+cambiar generar "GENERAR PDF" a algo que se entienda

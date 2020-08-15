@@ -15,12 +15,12 @@ function CargarTabla() {
             var total = {};
             total.meses = listaMeses.length;
             var html_1 = '<h1 style="padding-top: 2%;">Año Actual</h1> ';
-            html_1 += '<table class="table table-sm table-dark table-hover">';
-            html_1 += '<tr><th></th><th>Nº</th><th>Mes</th><th class="h6">Fecha Mod.</th>';
+            html_1 += '<table class="table table-sm table-dark table-hover">'; //table-dark
+            html_1 += '<tr><th ></th><th>Nº</th><th>Mes</th><th class="h6">Fecha Mod.</th>';
             html_1 += '<th class="text-center">Abrir</th><th class="pl-3">Eliminar</th></tr>';
             listaMeses.forEach(function (element) {
                 fila_1++;
-                html_1 += '<tr"><td></td><td>' + fila_1 + '</td><td>' + element.mes + '</td><td>' + element.fecha + '</td>';
+                html_1 += '<tr onclick="algo(' + fila_1 + ')" id="algo' + fila_1 + '"><td></td><td>' + fila_1 + '</td><td>' + element.mes + '</td><td>' + element.fecha + '</td>';
                 html_1 += "<td><input type='button' value='Abrir' class='btn btn-success btn-block' onclick='ArmarModificar(" + JSON.stringify(element) + "," + fila_1 + ")'></td>";
                 html_1 += '<td><input type="button" value="Eliminar" class="btn btn-danger" onclick="Eliminar(' + element.id + ')"></td></tr>';
             });
@@ -35,4 +35,7 @@ function CargarTabla() {
     }).fail(function (jqxhr) {
         console.log(jqxhr.responseText);
     });
+}
+function algo(fila) {
+    $("#algo" + fila).addClass("bg-primary");
 }

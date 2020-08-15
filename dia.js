@@ -52,9 +52,9 @@ function CargarTabla() {
             total_1.revisitas = 0;
             total_1.estudios = 0;
             var html_1 = '<h1 style="padding-top: 2%;">Mes Actual</h1> ';
-            html_1 += '<table class="table table-sm table-dark table-hover">';
-            html_1 += '<tr><th></th><th>Nº</th><th>Fecha</th><th>Publicaciones</th><th>Videos</th><th>Horas</th>';
-            html_1 += '<th>Revisitas</th><th>Estudios</th><th>Modificar</th><th>Eliminar</th></tr>';
+            html_1 += '<table class="table table-sm table-dark table-dark table-hover">';
+            html_1 += '<tr><th></th><th>Nº</th><th class="text-center">Fecha</th><th class="text-center">Publicaciones</th><th class="text-center">Videos</th><th class="text-center">Horas</th>';
+            html_1 += '<th class="text-center">Revisitas</th><th class="text-center">Estudios</th><th>Modificar</th><th>Eliminar</th></tr>';
             listaDias.forEach(function (element) {
                 fila_1++;
                 total_1.publicaciones += parseInt(element.publicaciones);
@@ -62,11 +62,12 @@ function CargarTabla() {
                 arrayHoras_1.push(element.horas);
                 total_1.revisitas += parseInt(element.revisitas);
                 total_1.estudios += parseInt(element.estudios);
-                html_1 += '<tr"><td></td><td>' + fila_1 + '</td><td>' + element.fecha + '</td><td class="text-center">' + element.publicaciones + '</td>';
-                html_1 += '<td class="text-center">' + element.videos + '</td>' + '<td>' + element.horas + '</td>';
+                html_1 += '<tr onclick="SeleccionarFilaPrimary(' + fila_1 + "," + total_1.dias + ')" id="fila-' + fila_1 + '" ><td></td>';
+                html_1 += '<td class="text-center">' + fila_1 + '</td><td class="text-center">' + element.fecha + '</td>' + '<td class="text-center">' + element.publicaciones + '</td>';
+                html_1 += '<td class="text-center">' + element.videos + '</td>' + '<td class="text-center">' + element.horas + '</td>';
                 html_1 += '<td class="text-center">' + element.revisitas + '</td><td class="text-center">' + element.estudios + '</td>';
                 html_1 += "<td><input type='button' value='Modificar' class='btn btn-warning' onclick='ArmarModificar(" + JSON.stringify(element) + "," + fila_1 + ")'></td>";
-                html_1 += '<td><input type="button" value="Eliminar" class="btn btn-danger" onclick="Eliminar(' + element.id + ')"></td></tr>';
+                html_1 += '<td><input type="button" value="Eliminar" class="btn btn-danger" onclick="Eliminar(' + element.id + "," + fila_1 + ')"></td></tr>';
             });
             total_1.horas = CalcularTotalHoras(arrayHoras_1);
             html_1 += '<tr><td>Total:</td><td class="text-left" colspan="2">' + total_1.dias + ' Dias</td><td class="text-center">' + total_1.publicaciones + '</td>';
@@ -131,9 +132,9 @@ function CalcularTotalHoras(arrayHoras) {
     return retorno;
 }
 //Cambiar confirm por ventana Modal
-function Eliminar(id) {
+function Eliminar(id, fila) {
     var pagina = "BACKEND/dia/borrar";
-    if (confirm("Desea eliminar la fila nº" + id)) {
+    if (confirm("Desea eliminar la fila nº" + fila)) {
         $.ajax({
             url: pagina,
             type: "delete",
@@ -217,6 +218,31 @@ function AdministrarValidaciones(dia) {
         retorno = true;
     }
     return retorno;
+}
+function SeleccionarFilaPrimary(numero, cantidad) {
+    for (var i = 1; i <= cantidad; i++) {
+        if (i != numero)
+            $("#fila-" + i).removeClass("bg-primary");
+    }
+    ///no entra al else
+    if (!$("#fila-" + numero).hasClass("bg-primary")) {
+        $("#fila-" + numero).addClass("bg-primary");
+    }
+    else {
+        $("#fila-" + numero).removeClass("bg-primary");
+    }
+}
+function SeleccionarFilaModificar(numero, cantidad) {
+    for (var i = 1; i <= cantidad; i++) {
+        $("#fila-" + i).removeClass("bg-warning");
+    }
+    ///no entra al else
+    if ($("#fila-" + numero).hasClass("bg-warning")) {
+        $("#fila-" + numero).addClass("bg-warning");
+    }
+    else {
+        $("#fila-" + numero).removeClass("bg-warning");
+    }
 }
 //#region Alerts
 //class=alert-dissmisable

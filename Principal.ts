@@ -23,12 +23,12 @@ function CargarTabla()
            
             
             let html='<h1 style="padding-top: 2%;">Año Actual</h1> ';
-            html+='<table class="table table-sm table-dark table-hover">';
-            html+='<tr><th></th><th>Nº</th><th>Mes</th><th class="h6">Fecha Mod.</th>';
+            html+='<table class="table table-sm table-dark table-hover">';//table-dark
+            html+='<tr><th ></th><th>Nº</th><th>Mes</th><th class="h6">Fecha Mod.</th>';
             html+='<th class="text-center">Abrir</th><th class="pl-3">Eliminar</th></tr>';
             listaMeses.forEach(element => {
                 fila++;
-                html+='<tr"><td></td><td>'+fila+'</td><td>'+element.mes+'</td><td>'+element.fecha+'</td>';
+                html+='<tr onclick="algo('+fila+')" id="algo'+ fila +'"><td></td><td>'+fila+'</td><td>'+element.mes+'</td><td>'+element.fecha+'</td>';
                 html+="<td><input type='button' value='Abrir' class='btn btn-success btn-block' onclick='ArmarModificar("+JSON.stringify(element) +","+fila+")'></td>";
                 html+='<td><input type="button" value="Eliminar" class="btn btn-danger" onclick="Eliminar('+element.id+')"></td></tr>';
             });
@@ -48,3 +48,10 @@ function CargarTabla()
     });
     
 }
+
+function algo(fila)
+{
+    $("#algo"+fila).addClass("bg-primary");
+}
+
+

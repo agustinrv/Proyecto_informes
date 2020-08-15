@@ -72,9 +72,9 @@ function CargarTabla()
            
             
             let html='<h1 style="padding-top: 2%;">Mes Actual</h1> ';
-            html+='<table class="table table-sm table-dark table-hover">';
-            html+='<tr><th></th><th>Nº</th><th>Fecha</th><th>Publicaciones</th><th>Videos</th><th>Horas</th>';
-            html+='<th>Revisitas</th><th>Estudios</th><th>Modificar</th><th>Eliminar</th></tr>';
+            html+='<table class="table table-sm table-dark table-dark table-hover">';
+            html+='<tr><th></th><th>Nº</th><th class="text-center">Fecha</th><th class="text-center">Publicaciones</th><th class="text-center">Videos</th><th class="text-center">Horas</th>';
+            html+='<th class="text-center">Revisitas</th><th class="text-center">Estudios</th><th>Modificar</th><th>Eliminar</th></tr>';
             listaDias.forEach(element => {
                 fila++;
                 total.publicaciones+=parseInt(element.publicaciones);
@@ -83,11 +83,12 @@ function CargarTabla()
                 total.revisitas+=parseInt(element.revisitas);
                 total.estudios+=parseInt(element.estudios);
 
-                html+='<tr"><td></td><td>'+fila+'</td><td>'+element.fecha+'</td><td class="text-center">'+element.publicaciones+'</td>';
-                html+='<td class="text-center">'+element.videos+'</td>'+'<td>'+element.horas+'</td>';
+                html+='<tr onclick="SeleccionarFilaPrimary('+fila+","+total.dias+')" id="fila-'+fila+'" ><td></td>';
+                html+='<td class="text-center">'+fila+'</td><td class="text-center">'+element.fecha+'</td>'+'<td class="text-center">'+element.publicaciones+'</td>';
+                html+='<td class="text-center">'+element.videos+'</td>'+'<td class="text-center">'+element.horas+'</td>';
                 html+='<td class="text-center">'+element.revisitas+'</td><td class="text-center">'+element.estudios+'</td>';    
                 html+="<td><input type='button' value='Modificar' class='btn btn-warning' onclick='ArmarModificar("+JSON.stringify(element) +","+fila+")'></td>";
-                html+='<td><input type="button" value="Eliminar" class="btn btn-danger" onclick="Eliminar('+element.id+')"></td></tr>';
+                html+='<td><input type="button" value="Eliminar" class="btn btn-danger" onclick="Eliminar('+element.id+","+fila+')"></td></tr>';
             });
             total.horas=CalcularTotalHoras(arrayHoras);
             html+='<tr><td>Total:</td><td class="text-left" colspan="2">'+total.dias+' Dias</td><td class="text-center">'+total.publicaciones+'</td>';
@@ -180,11 +181,11 @@ function CalcularTotalHoras(arrayHoras)
 
 //Cambiar confirm por ventana Modal
 
-function Eliminar(id)
+function Eliminar(id,fila)
 {
     let pagina="BACKEND/dia/borrar";
 
-    if(confirm("Desea eliminar la fila nº" + id))
+    if(confirm("Desea eliminar la fila nº" + fila))
     {
         $.ajax({
             url:pagina,
@@ -297,6 +298,47 @@ function AdministrarValidaciones(dia)
 
     return retorno;
 }
+
+function SeleccionarFilaPrimary(numero,cantidad)
+{
+
+    for(let i=1;i<=cantidad;i++)
+    {
+        if(i!=numero)
+        $("#fila-"+i).removeClass("bg-primary");
+    }
+///no entra al else
+    if(!$("#fila-"+numero).hasClass("bg-primary"))
+    {
+        $("#fila-"+numero).addClass("bg-primary");
+    }
+    else
+    {
+        $("#fila-"+numero).removeClass("bg-primary");
+    }
+
+}
+
+function SeleccionarFilaModificar(numero,cantidad)
+{
+
+    for(let i=1;i<=cantidad;i++)
+    {
+        
+        $("#fila-"+i).removeClass("bg-warning");
+    }
+///no entra al else
+    if($("#fila-"+numero).hasClass("bg-warning"))
+    {
+        $("#fila-"+numero).addClass("bg-warning");
+    }
+    else
+    {
+        $("#fila-"+numero).removeClass("bg-warning");
+    }
+
+}
+
 
 
 //#region Alerts
