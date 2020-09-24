@@ -33,6 +33,51 @@ class Mes
         return $unMes;
     }
 
+    public static function AgregarUno(Request $request,Response $response ,$args)
+    {
+
+    }
+
+    public static function TraerTodos(Request $request,Response $response,$args)
+    {
+        $flag=false;
+        $archivos=scandir("./Meses");
+        
+        
+        if(isset($archivos))
+        {
+            if(!empty($archivos))
+            {
+                $flag=true;
+            }
+        }
+
+        if($flag)
+        {
+            unset($archivos[0]);
+            unset($archivos[1]);
+            $listaArchivos=array();
+            
+            
+            foreach ($archivos as $key => $value) {
+                $json=new stdClass();
+                $json->nombre=$value;
+                $json->fecha=date("d-m-Y H:i:s",filectime("./Meses/" . $value));
+                
+                array_push($listaArchivos,$json);
+            }
+            
+           
+
+            $response=$response->withjson($listaArchivos,200);
+        }
+        else
+        {
+            $response=$response->withjson(null,403);
+        }
+
+        return $response;
+    }
 
 
 }

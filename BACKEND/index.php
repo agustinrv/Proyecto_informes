@@ -7,8 +7,7 @@ use Firebase\JWT\JWT;
 
 require "./vendor/autoload.php";
 require "./Clases/Dia.php";
-//require_once './Clases/AccesoDatos.php';
-//require './Clases/mw.php';
+require "./Clases/Mes.php";
 
 $config['displayErrorDetails'] = true;
 $config['addContentLengthHeader'] = false;
