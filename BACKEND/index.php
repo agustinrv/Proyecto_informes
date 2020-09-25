@@ -27,11 +27,11 @@ $app->group("/dia",function(){
 
 $app->group("/mes",function(){
 
-    $this->post("/agregar",\Mes::class . "::AgregarUno");
+    $this->post("/agregar",\Mes::class . "::AgregarUno")->add(
+                            \Mes::class . "::Existe");
     $this->get("/traerTodos",\Mes::class . "::TraerTodos");
     $this->delete("/borrar",\Mes::class . "::BorrarUno");
-    $this->put("/modificar",\Mes::class . "::ModificarUno")->add(
-                            \Mes::class . "::ValidarFechaYHora");
+    $this->put("/modificar",\Mes::class . "::ModificarUno");//tiene que abrir el archivo seleccionado;
 });
 
 $app->run();

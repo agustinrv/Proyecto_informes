@@ -16,12 +16,11 @@ function CargarTabla()
     }).done(function(respuesta){
 
         let fila=0;       
-        let listaMeses=respuesta;
+        let listaMeses=OrdenarPorID(respuesta,true);
         let total:any={};
-        console.log(respuesta);
 
         total.meses=listaMeses.length;
-    
+
         let html='<h1 style="padding-top: 2%;">Año Actual</h1> ';
         html+='<table class="table table-sm table-dark table-hover">';
         html+='<tr><th ></th><th>Nº</th><th>Mes</th><th class="h6">Fecha Mod.</th>';
@@ -29,8 +28,8 @@ function CargarTabla()
         listaMeses.forEach(element => {
             fila++;
             html+='<tr onclick="SeleccionarFilaPrimary('+fila+','+total.meses+')" id="fila-'+ fila +'"><td></td><td>'+fila+'</td><td>'+element.nombre+'</td><td>'+element.fecha+'</td>';
-            html+="<td><input type='button' value='Abrir' class='btn btn-success btn-block' onclick='ArmarModificar("+JSON.stringify(element) +","+fila+")'></td>";
-            html+='<td><input type="button" value="Eliminar" class="btn btn-danger" onclick="Eliminar('+element.nombre+')"></td>';
+            html+="<td><input type='button' value='Abrir' class='btn btn-success btn-block' onclick='Abrir()'></td>";
+            html+='<td><input type="button" value="Eliminar" class="btn btn-danger" onclick=Eliminar("'+element.nombre+'")></td>';
             html+='<td><input type="button" value="Descargar" class="btn btn-info" onclick="Descargar()"></td></tr>';
         });
         html+='<tr><td>Total:</td><td class="text-left" colspan="2">'+total.meses+' Meses</td>';
@@ -40,7 +39,8 @@ function CargarTabla()
     
         //GenerarInforme(total);
     }).fail(function(jqxhr){
-        console.log(jqxhr.responseText);
+        let respuesta=JSON.parse(jqxhr.responseText);
+        AlertDanger(respuesta.mensaje);
     });
     
 }
@@ -65,10 +65,72 @@ function Agregar()
         CargarTabla();
         AlertSuccess(respuesta.mensaje);
     }).fail(function(jqxhr){
-        console.log(jqxhr.responseText);
         let respuesta=JSON.parse(jqxhr.responseText);
         AlertDanger(respuesta.mensaje);
     });
+}
+
+function Eliminar(nombreArchivo)
+{
+    let pagina="./BACKEND/mes/borrar";
+    if(confirm("Desea eliminar el archivo: "+nombreArchivo))
+    {
+        $.ajax({
+            url:pagina,
+            type:"delete",
+            data:{"nombreArchivo":nombreArchivo},
+            dataType:"json",
+            async:true
+        }).done(function(resultado){
+            CargarTabla();
+            AlertSuccess(resultado.mensaje);
+        }).fail(function(jqxhr){
+            let respuesta=JSON.parse( jqxhr.responseText);
+            AlertDanger(respuesta.mensaje);
+        });
+    }    
+
+}
+
+function OrdenarPorID(lista,asendente:boolean)
+{
+    let i=0;
+    let j=0;
+    let aux=0;
+    console.log(lista);
+
+    if(asendente)
+    {
+        for(i=0;i<lista.length-1;i++)
+        {
+            for(j=i+1;j<lista.length;j++)
+            {
+                if(lista[i].id>lista[j].id)
+                {
+                    aux=lista[i];
+                    lista[i]=lista[j];
+                    lista[j]=aux;
+                }
+            }
+        }
+    }
+    else
+    {
+        for(i=0;i<lista.length-1;i++)
+        {
+            for(j=i+1;j<lista.length;j++)
+            {
+                if(lista[i].id<lista[j].id)
+                {
+                    aux=lista[i];
+                    lista[i]=lista[j];
+                    lista[j]=aux;
+                }
+            }
+        }
+    }
+
+    return lista;
 }
 
 

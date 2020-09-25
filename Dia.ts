@@ -3,6 +3,8 @@
 
 
 
+
+
 function Agregar()
 {
     let dia:any={};
@@ -46,9 +48,14 @@ function Agregar()
 
 //Deberia verse selecionada la fila que voy a modificar
 
-function CargarTabla()
+function CargarTabla(archivo)
 {
+    
+
     let pagina="BACKEND/dia/traerTodos";
+    let form = new FormData();
+    form.append("archivo",archivo);
+    
     $.ajax({
         url:pagina,
         type:"get",
