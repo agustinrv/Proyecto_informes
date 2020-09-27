@@ -21,7 +21,8 @@ class Dia
 
     public function __construct($_fecha,$_horas,$_publicaciones=0,$_videos=0,
                                 $_revisitas=0,$_estudios=0){
-        $this->id=self::GenerarID();                                  
+        
+        //$this->id=self::GenerarID($nombreArchivo);                                  
         $this->fecha=$_fecha;
         $this->publicaciones=$_publicaciones;
         $this->videos=$_videos;
@@ -30,9 +31,9 @@ class Dia
         $this->estudios=$_estudios;
     }
 
-    public static function GenerarID()
+    public static function GenerarID($nombreArchivo)
     {
-        $lista=self::TraerTodosJSON();
+        $lista=self::TraerDiasJSON($nombreArchivo);
         $lista=$lista;
         $retorno=1;
         if(!empty($lista))
@@ -63,9 +64,9 @@ class Dia
                 " - " .$this->horas . " - " .$this->revisitas . " - " .$this->estudios;
     }
 
-    private static function AgregarEnArchivoJSON(stdClass $json)
+    private static function AgregarEnArchivoJSON($nombreArchivo,$json)
     {
-        $path="./Meses/ejemplo.json";
+        $path="./Meses/". $nombreArchivo;
         $archivo=fopen($path,"a");
         $retorno=false;
         $cadenaJson=json_encode($json);
@@ -87,12 +88,13 @@ class Dia
         $recibo=$request->getParsedBody();
         
         $json=json_decode($recibo["cadenaJson"]);
-        $json->id= self::GenerarID();
+        $nombreArchivo=$recibo["nombreArchivo"];
+       $json->id= self::GenerarID($nombreArchivo);
 
         $retorno= new stdClass();
         $json=self::ValidarCamposVacios($json);
 
-        if(self::AgregarEnArchivoJSON($json))
+        if(self::AgregarEnArchivoJSON($nombreArchivo,$json))
         {
             $retorno->exito=true;
             $retorno->status=200;
@@ -160,9 +162,9 @@ class Dia
     }
 
 
-    private static function TraerTodosJSON()
+    private static function TraerDiasJSON($nombreArchivo)
     {
-        $path="./Meses/ejemplo.json";
+        $path="./Meses/" . $nombreArchivo;
         $archivo=fopen($path,"r");
         $listaRetorno=array();
         $listaRetorno;
@@ -190,7 +192,8 @@ class Dia
 
     public static function TraerTodos(Request $request,Response $response,$args)
     {
-        $lista=self::TraerTodosJSON();
+        $nombreArchivo=$args["nombreArchivo"];
+        $lista=self::TraerDiasJSON($nombreArchivo);
         $retorno = new stdClass();
 
         if(!empty($lista))
@@ -231,7 +234,7 @@ class Dia
 
     public static function BorrarUnoJSON($id)
     {
-        $lista=self::TraerTodosJSON();
+        $lista=self::TraerDiasJSON();
         $nuevaLista=array();
         $retorno=false;
 
@@ -278,7 +281,7 @@ class Dia
 
     public static function ModificarEnArchivoJSON($elemento)
     {
-        $lista=self::TraerTodosJSON();
+        $lista=self::TraerDiasJSON();
         $nuevaLista=array();
         $retorno=false;
 

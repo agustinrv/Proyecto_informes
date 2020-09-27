@@ -28,7 +28,7 @@ function CargarTabla()
         listaMeses.forEach(element => {
             fila++;
             html+='<tr onclick="SeleccionarFilaPrimary('+fila+','+total.meses+')" id="fila-'+ fila +'"><td></td><td>'+fila+'</td><td>'+element.nombre+'</td><td>'+element.fecha+'</td>';
-            html+="<td><input type='button' value='Abrir' class='btn btn-success btn-block' onclick='Abrir()'></td>";
+            html+='<td><input type="button" value="Abrir" class="btn btn-success btn-block" onclick=Abrir("'+element.nombre+'")></td>';
             html+='<td><input type="button" value="Eliminar" class="btn btn-danger" onclick=Eliminar("'+element.nombre+'")></td>';
             html+='<td><input type="button" value="Descargar" class="btn btn-info" onclick="Descargar()"></td></tr>';
         });
@@ -92,12 +92,23 @@ function Eliminar(nombreArchivo)
 
 }
 
+function Abrir(nombreArchivo)
+{
+
+    $("#archivo").val(nombreArchivo);
+    let form:HTMLFormElement=<HTMLFormElement>document.getElementById("formArchivo");
+    form.submit();
+    localStorage.setItem("nombreArchivo",nombreArchivo);
+}
+
+
+
+
 function OrdenarPorID(lista,asendente:boolean)
 {
     let i=0;
     let j=0;
     let aux=0;
-    console.log(lista);
 
     if(asendente)
     {

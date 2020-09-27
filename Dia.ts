@@ -9,7 +9,6 @@ function Agregar()
 {
     let dia:any={};
     let pagina="BACKEND/dia/agregar";
-
     dia.fecha=$("#dateFecha").val();
     dia.publicaciones=$("#txtPublicaciones").val();
     dia.videos=$("#txtVideos").val();
@@ -17,10 +16,13 @@ function Agregar()
     dia.revisitas=$("#txtRevisitas").val();
     dia.estudios=$("#txtEstudios").val();
 
+    
     if(AdministrarValidaciones(dia))
     {
+        let nombreArchivo=localStorage.getItem("nombreArchivo");
         let form = new FormData();
         form.append("cadenaJson",JSON.stringify(dia));
+        form.append("nombreArchivo",nombreArchivo);
 
         $.ajax({
             url:pagina,
@@ -48,20 +50,18 @@ function Agregar()
 
 //Deberia verse selecionada la fila que voy a modificar
 
-function CargarTabla(archivo)
+function CargarTabla()
 {
-    
+    let nombreArchivo=localStorage.getItem("nombreArchivo");
 
-    let pagina="BACKEND/dia/traerTodos";
-    let form = new FormData();
-    form.append("archivo",archivo);
+    let pagina="BACKEND/dia/traerTodos/" + nombreArchivo;
     
     $.ajax({
         url:pagina,
         type:"get",
         dataType:"json",
         //contentType:false,
-      //  processData:false,
+        //processData:false,
         async:true
     }).done(function(respuesta){
         if(respuesta.exito)

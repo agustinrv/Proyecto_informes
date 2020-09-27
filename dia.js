@@ -1,4 +1,49 @@
+function SeleccionarFilaPrimary(numero, cantidad) {
+    for (var i = 1; i <= cantidad; i++) {
+        if (i != numero)
+            $("#fila-" + i).removeClass("bg-primary");
+    }
+    ///no entra al else
+    if (!$("#fila-" + numero).hasClass("bg-primary")) {
+        $("#fila-" + numero).addClass("bg-primary");
+    }
+    else {
+        $("#fila-" + numero).removeClass("bg-primary");
+    }
+}
+function SeleccionarFilaModificar(numero, cantidad) {
+    for (var i = 1; i <= cantidad; i++) {
+        $("#fila-" + i).removeClass("bg-warning");
+    }
+    ///no entra al else
+    if ($("#fila-" + numero).hasClass("bg-warning")) {
+        $("#fila-" + numero).addClass("bg-warning");
+    }
+    else {
+        $("#fila-" + numero).removeClass("bg-warning");
+    }
+}
+//#region Alerts
+//class=alert-dissmisable
+function AlertSuccess(mensaje) {
+    var html = '<div class="alert alert-success">' + mensaje + '</div>';
+    $("#divAlert").html(html);
+}
+function AlertDanger(mensaje) {
+    var html = '<div class="alert alert-danger alert-dissmisable">' + mensaje + '</div>';
+    $("#divAlert").html(html);
+}
+function AlertWarning(mensaje) {
+    var html = '<div class="alert alert-warning alert-dissmisable">' + mensaje + '</div>';
+    $("#divAlert").html(html);
+}
+function AlertInforme(mensaje) {
+    var html = '<div class="alert alert-info alert-dissmisable">' + mensaje + '</div>';
+    $("#divInforme").html(html);
+}
+//#endregion
 ///<reference path="node_modules/@types/jquery/index.d.ts" />
+///<reference path="./genericas.ts" />
 function Agregar() {
     var dia = {};
     var pagina = "BACKEND/dia/agregar";
@@ -9,8 +54,10 @@ function Agregar() {
     dia.revisitas = $("#txtRevisitas").val();
     dia.estudios = $("#txtEstudios").val();
     if (AdministrarValidaciones(dia)) {
+        var nombreArchivo = localStorage.getItem("nombreArchivo");
         var form = new FormData();
         form.append("cadenaJson", JSON.stringify(dia));
+        form.append("nombreArchivo", nombreArchivo);
         $.ajax({
             url: pagina,
             type: "post",
@@ -32,13 +79,14 @@ function Agregar() {
 }
 //Deberia verse selecionada la fila que voy a modificar
 function CargarTabla() {
-    var pagina = "BACKEND/dia/traerTodos";
+    var nombreArchivo = localStorage.getItem("nombreArchivo");
+    var pagina = "BACKEND/dia/traerTodos/" + nombreArchivo;
     $.ajax({
         url: pagina,
         type: "get",
         dataType: "json",
         //contentType:false,
-        //  processData:false,
+        //processData:false,
         async: true
     }).done(function (respuesta) {
         if (respuesta.exito) {
@@ -219,47 +267,3 @@ function AdministrarValidaciones(dia) {
     }
     return retorno;
 }
-function SeleccionarFilaPrimary(numero, cantidad) {
-    for (var i = 1; i <= cantidad; i++) {
-        if (i != numero)
-            $("#fila-" + i).removeClass("bg-primary");
-    }
-    ///no entra al else
-    if (!$("#fila-" + numero).hasClass("bg-primary")) {
-        $("#fila-" + numero).addClass("bg-primary");
-    }
-    else {
-        $("#fila-" + numero).removeClass("bg-primary");
-    }
-}
-function SeleccionarFilaModificar(numero, cantidad) {
-    for (var i = 1; i <= cantidad; i++) {
-        $("#fila-" + i).removeClass("bg-warning");
-    }
-    ///no entra al else
-    if ($("#fila-" + numero).hasClass("bg-warning")) {
-        $("#fila-" + numero).addClass("bg-warning");
-    }
-    else {
-        $("#fila-" + numero).removeClass("bg-warning");
-    }
-}
-//#region Alerts
-//class=alert-dissmisable
-function AlertSuccess(mensaje) {
-    var html = '<div class="alert alert-success">' + mensaje + '</div>';
-    $("#divAlert").html(html);
-}
-function AlertDanger(mensaje) {
-    var html = '<div class="alert alert-danger alert-dissmisable">' + mensaje + '</div>';
-    $("#divAlert").html(html);
-}
-function AlertWarning(mensaje) {
-    var html = '<div class="alert alert-warning alert-dissmisable">' + mensaje + '</div>';
-    $("#divAlert").html(html);
-}
-function AlertInforme(mensaje) {
-    var html = '<div class="alert alert-info alert-dissmisable">' + mensaje + '</div>';
-    $("#divInforme").html(html);
-}
-//#endregion

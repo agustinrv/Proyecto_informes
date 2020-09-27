@@ -19,7 +19,10 @@ $app->group("/dia",function(){
 
     $this->post("/agregar",\Dia::class . "::AgregarUno")->add(
                            \Dia::class . "::ValidarFechaYHora");
-    $this->get("/traerTodos",\Dia::class . "::TraerTodos");
+                           //validarQue exista nombre de archivo
+    $this->get("/traerTodos/{nombreArchivo}",\Dia::class . "::TraerTodos");
+    //mandar por medios que no sean argumentos
+    //si el archvo esta vasio se muestra la atabla vacia y/o se lo indica con un mensaje
     $this->delete("/borrar",\Dia::class . "::BorrarUno");
     $this->put("/modificar",\Dia::class . "::ModificarUno")->add(
                             \Dia::class . "::ValidarFechaYHora");
