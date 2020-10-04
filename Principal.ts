@@ -30,7 +30,7 @@ function CargarTabla()
             html+='<tr onclick="SeleccionarFilaPrimary('+fila+','+total.meses+')" id="fila-'+ fila +'"><td></td><td>'+fila+'</td><td>'+element.nombre+'</td><td>'+element.fecha+'</td>';
             html+='<td><input type="button" value="Abrir" class="btn btn-success btn-block" onclick=Abrir("'+element.nombre+'")></td>';
             html+='<td><input type="button" value="Eliminar" class="btn btn-danger" onclick=Eliminar("'+element.nombre+'")></td>';
-            html+='<td><input type="button" value="Descargar" class="btn btn-info" onclick="Descargar()"></td></tr>';
+            html+='<td><a href="BACKEND/Meses/'+element.nombre+'" class="btn btn-info" download="'+element.nombre+'">Descargar</a></tr>';
         });
         html+='<tr><td>Total:</td><td class="text-left" colspan="2">'+total.meses+' Meses</td>';
         html+='</table>';

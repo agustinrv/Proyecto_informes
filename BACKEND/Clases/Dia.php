@@ -89,7 +89,7 @@ class Dia
         
         $json=json_decode($recibo["cadenaJson"]);
         $nombreArchivo=$recibo["nombreArchivo"];
-       $json->id= self::GenerarID($nombreArchivo);
+        $json->id= self::GenerarID($nombreArchivo);
 
         $retorno= new stdClass();
         $json=self::ValidarCamposVacios($json);
