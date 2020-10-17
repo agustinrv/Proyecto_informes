@@ -132,7 +132,7 @@ class Dia
         return $json;
     }
 
-    public static function ValidarFechaYHora(Request $request,Response $response,$next)
+    public static function ValidarHora(Request $request,Response $response,$next)
     {
         $recibo=$request->getParsedBody();
         if($request->isPost())
@@ -146,9 +146,9 @@ class Dia
         
         $retorno=new stdClass();
 
-        if(empty($json->fecha) || empty($json->horas))
+        if(empty($json->horas))
         {
-            $retorno->mensaje="<strong>Error!!!</strong>,la fecha y la hora son obligatorias";
+            $retorno->mensaje='<strong>Error!!!</strong>,El campo <strong>"Horas"</strong> son obligatorias';
             $retorno->status=418;
             $retorno->exito=false;
             $response=$response->withJson($retorno,$retorno->status);
@@ -171,19 +171,25 @@ class Dia
 
         if(isset($archivo))
         {
-            
-            while(!feof($archivo))
+            if(filesize($path) > 0)
             {
-                $cadenaJson=fgets($archivo);
-                if(!empty($cadenaJson))
+                while(!feof($archivo))
                 {
-                    $json=json_decode($cadenaJson);
-                    array_push($listaRetorno,$json);
+                    $cadenaJson=fgets($archivo);
+                    if(!empty($cadenaJson))
+                    {
+                        $json=json_decode($cadenaJson);
+                        array_push($listaRetorno,$json);
+                    }
+
+                    
                 }
-
-                
             }
-
+            else
+            {
+                $listaRetorno=false;
+            }
+            
             fclose($archivo);
         }
 
@@ -201,6 +207,13 @@ class Dia
             $retorno->exito=true;
             $retorno->status=200;
             $retorno->mensaje="Se han recuperado exitosamente!!!";
+            $retorno->listaDias=$lista;   
+        }
+        else if($lista==false)
+        {
+            $retorno->exito=true;
+            $retorno->status=200;
+            $retorno->mensaje="El archivo esta vacio,cargue un elemento para poder verlo";
             $retorno->listaDias=$lista;
         }
         else
@@ -232,9 +245,9 @@ class Dia
         return $retorno;
     }
 
-    public static function BorrarUnoJSON($id)
+    public static function BorrarUnoJSON($id,$nombreArchivo)
     {
-        $lista=self::TraerDiasJSON();
+        $lista=self::TraerDiasJSON($nombreArchivo);
         $nuevaLista=array();
         $retorno=false;
 
@@ -258,11 +271,11 @@ class Dia
     public static function BorrarUno(Request $request,Response $response,$args)
     {
         $recibo=$request->getParsedBody();
-         
         $id=$recibo["id"];
+        $nombreArchivo=$recibo["archivo"];
         $retorno=new stdClass();        
 
-        if(self::BorrarUnoJson($id))
+        if(self::BorrarUnoJson($id,$nombreArchivo))
         {
             $retorno->exito=true;
             $retorno->mensaje="Se a eliminado exitosamente";
@@ -281,7 +294,7 @@ class Dia
 
     public static function ModificarEnArchivoJSON($elemento)
     {
-        $lista=self::TraerDiasJSON();
+        $lista=self::TraerDiasJSON($elemento->archivo);
         $nuevaLista=array();
         $retorno=false;
 

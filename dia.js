@@ -90,43 +90,48 @@ function CargarTabla() {
         async: true
     }).done(function (respuesta) {
         if (respuesta.exito) {
-            var fila_1 = 0;
-            var listaDias = respuesta.listaDias;
-            var total_1 = {};
-            var arrayHoras_1 = Array();
-            total_1.dias = listaDias.length;
-            total_1.publicaciones = 0;
-            total_1.videos = 0;
-            total_1.revisitas = 0;
-            total_1.estudios = 0;
-            var archivo = localStorage.getItem("nombreArchivo");
-            var html_1 = '<h1 style="padding-top: 2%;">' + archivo + '</h1> ';
-            html_1 += '<table class="table table-sm table-dark table-dark table-hover">';
-            html_1 += '<tr><th></th><th>Nº</th><th class="text-center">Fecha</th><th class="text-center">Publicaciones</th><th class="text-center">Videos</th><th class="text-center">Horas</th>';
-            html_1 += '<th class="text-center">Revisitas</th><th class="text-center">Estudios</th><th>Modificar</th><th>Eliminar</th></tr>';
-            listaDias.forEach(function (element) {
-                fila_1++;
-                total_1.publicaciones += parseInt(element.publicaciones);
-                total_1.videos += parseInt(element.videos);
-                arrayHoras_1.push(element.horas);
-                total_1.revisitas += parseInt(element.revisitas);
-                total_1.estudios += parseInt(element.estudios);
-                html_1 += '<tr onclick="SeleccionarFilaPrimary(' + fila_1 + "," + total_1.dias + ')" id="fila-' + fila_1 + '" ><td></td>';
-                html_1 += '<td class="text-center">' + fila_1 + '</td><td class="text-center">' + element.fecha + '</td>' + '<td class="text-center">' + element.publicaciones + '</td>';
-                html_1 += '<td class="text-center">' + element.videos + '</td>' + '<td class="text-center">' + element.horas + '</td>';
-                html_1 += '<td class="text-center">' + element.revisitas + '</td><td class="text-center">' + element.estudios + '</td>';
-                html_1 += "<td><input type='button' value='Modificar' class='btn btn-warning' onclick='ArmarModificar(" + JSON.stringify(element) + "," + fila_1 + ")'></td>";
-                html_1 += '<td><input type="button" value="Eliminar" class="btn btn-danger" onclick="Eliminar(' + element.id + "," + fila_1 + ')"></td></tr>';
-            });
-            total_1.horas = CalcularTotalHoras(arrayHoras_1);
-            html_1 += '<tr><td>Total:</td><td class="text-left" colspan="2">' + total_1.dias + ' Dias</td><td class="text-center">' + total_1.publicaciones + '</td>';
-            html_1 += '<td class="text-center">' + total_1.videos + '</td><td class="text-center">' + total_1.horas + '</td>';
-            html_1 += '<td class="text-center">' + total_1.revisitas + '</td><td class="text-center">' + total_1.estudios + '</td></tr></table>';
-            html_1 += '<input type="button" value="Generar Informe" class="btn btn-primary" id="btnInforme">';
-            html_1 += '<div id="divInforme" class="mt-2"></div>';
-            $("#tablaMes").html(html_1);
-            $("#btnInforme").attr("onclick", "GenerarInforme(" + JSON.stringify(total_1) + ")");
-            //GenerarInforme(total);
+            if (respuesta.listaDias == false) {
+                AlertWarning(respuesta.mensaje);
+            }
+            else {
+                var fila_1 = 0;
+                var listaDias = respuesta.listaDias;
+                var total_1 = {};
+                var arrayHoras_1 = Array();
+                total_1.dias = listaDias.length;
+                total_1.publicaciones = 0;
+                total_1.videos = 0;
+                total_1.revisitas = 0;
+                total_1.estudios = 0;
+                var archivo = localStorage.getItem("nombreArchivo");
+                var html_1 = '<h1 style="padding-top: 2%;">' + archivo + '</h1> ';
+                html_1 += '<table class="table table-sm table-dark table-dark table-hover">';
+                html_1 += '<tr><th></th><th>Nº</th><th class="text-center">Fecha</th><th class="text-center">Publicaciones</th><th class="text-center">Videos</th><th class="text-center">Horas</th>';
+                html_1 += '<th class="text-center">Revisitas</th><th class="text-center">Estudios</th><th>Modificar</th><th>Eliminar</th></tr>';
+                listaDias.forEach(function (element) {
+                    fila_1++;
+                    total_1.publicaciones += parseInt(element.publicaciones);
+                    total_1.videos += parseInt(element.videos);
+                    arrayHoras_1.push(element.horas);
+                    total_1.revisitas += parseInt(element.revisitas);
+                    total_1.estudios += parseInt(element.estudios);
+                    html_1 += '<tr onclick="SeleccionarFilaPrimary(' + fila_1 + "," + total_1.dias + ')" id="fila-' + fila_1 + '" ><td></td>';
+                    html_1 += '<td class="text-center">' + fila_1 + '</td><td class="text-center">' + element.fecha + '</td>' + '<td class="text-center">' + element.publicaciones + '</td>';
+                    html_1 += '<td class="text-center">' + element.videos + '</td>' + '<td class="text-center">' + element.horas + '</td>';
+                    html_1 += '<td class="text-center">' + element.revisitas + '</td><td class="text-center">' + element.estudios + '</td>';
+                    html_1 += "<td><input type='button' value='Modificar' class='btn btn-warning' onclick='ArmarModificar(" + JSON.stringify(element) + "," + fila_1 + ")'></td>";
+                    html_1 += '<td><input type="button" value="Eliminar" class="btn btn-danger" onclick="Eliminar(' + element.id + "," + fila_1 + ')"></td></tr>';
+                });
+                total_1.horas = CalcularTotalHoras(arrayHoras_1);
+                html_1 += '<tr><td>Total:</td><td class="text-left" colspan="2">' + total_1.dias + ' Dias</td><td class="text-center">' + total_1.publicaciones + '</td>';
+                html_1 += '<td class="text-center">' + total_1.videos + '</td><td class="text-center">' + total_1.horas + '</td>';
+                html_1 += '<td class="text-center">' + total_1.revisitas + '</td><td class="text-center">' + total_1.estudios + '</td></tr></table>';
+                html_1 += '<input type="button" value="Generar Informe" class="btn btn-primary" id="btnInforme">';
+                html_1 += '<div id="divInforme" class="mt-2"></div>';
+                $("#tablaMes").html(html_1);
+                $("#btnInforme").attr("onclick", "GenerarInforme(" + JSON.stringify(total_1) + ")");
+                //GenerarInforme(total);
+            }
         }
     }).fail(function (jqxhr) {
         console.log(jqxhr.responseText);
@@ -184,10 +189,11 @@ function CalcularTotalHoras(arrayHoras) {
 function Eliminar(id, fila) {
     var pagina = "BACKEND/dia/borrar";
     if (confirm("Desea eliminar la fila nº" + fila)) {
+        var archivo = localStorage.getItem("nombreArchivo");
         $.ajax({
             url: pagina,
             type: "delete",
-            data: { "id": id },
+            data: { "id": id, "archivo": archivo },
             dataType: "json",
             async: true
         }).done(function (resultado) {
@@ -209,6 +215,7 @@ function Modificar(id) {
     dia.horas = $("#txtHoras").val();
     dia.revisitas = $("#txtRevisitas").val();
     dia.estudios = $("#txtEstudios").val();
+    dia.archivo = localStorage.getItem("nombreArchivo");
     if (AdministrarValidaciones(dia)) {
         var json = { "cadenaJson": dia };
         $.ajax({
@@ -251,17 +258,13 @@ function ArmarModificar(elemento, fila) {
     AlertWarning("<strong>Cuidado!!!</strong> Fila nº " + fila + " seleccionada para modificar");
 }
 function AdministrarValidaciones(dia) {
-    var flagFecha = true;
     var flagHoras = true;
     var retorno = false;
-    if (dia.fecha.length == 0) {
-        flagFecha = false;
-    }
     if (dia.horas.length == 0 || dia.horas == "00:00") {
         flagHoras = false;
     }
-    if (!flagFecha || !flagHoras) {
-        AlertDanger("<strong>Error!!!</strong> Los campos fecha y horas son obligatorios");
+    if (!flagHoras) {
+        AlertDanger('<strong>Error!!!</strong> El campo <strong>"Horas"</strong> es obligatorio');
     }
     else {
         retorno = true;
