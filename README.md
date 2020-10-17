@@ -1,5 +1,7 @@
 # Proyecto_informes
 
+Algo para practicar...
+
 Debo agregar un sistema para poder cargar los archivos .json .
 un filtro para poder verlo por meses,un generar pdf la idea del pdf es que genere una tarjeta de publicador.
 
