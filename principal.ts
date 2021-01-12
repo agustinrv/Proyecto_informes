@@ -22,18 +22,19 @@ function CargarTabla()
         total.meses=listaMeses.length;
 
         let html='<h1 style="padding-top: 2%;">Año Actual</h1> ';
+        html+='<div class="table-responsive">';
         html+='<table class="table table-sm table-dark table-hover">';
         html+='<tr><th ></th><th>Nº</th><th>Mes</th><th class="h6">Fecha Mod.</th>';
         html+='<th class="text-center">Abrir</th><th class="pl-3">Eliminar</th><th class="pl-3">Descargar</th></tr>';
         listaMeses.forEach(element => {
             fila++;
-            html+='<tr onclick="SeleccionarFilaPrimary('+fila+','+total.meses+')" id="fila-'+ fila +'"><td></td><td>'+fila+'</td><td>'+element.nombre+'</td><td>'+element.fecha+'</td>';
+            html+='<tr onclick="SeleccionarFilaPrimary('+fila+','+total.meses+')" id="fila-'+ fila +'"><<td>'+fila+'</td><td>'+element.nombre+'</td><td>'+element.fecha+'</td>';
             html+='<td><input type="button" value="Abrir" class="btn btn-success btn-block" onclick=Abrir("'+element.nombre+'")></td>';
-            html+='<td><input type="button" value="Eliminar" class="btn btn-danger" onclick=Eliminar("'+element.nombre+'")></td>';
-            html+='<td><a href="BACKEND/Meses/'+element.nombre+'" class="btn btn-info" download="'+element.nombre+'">Descargar</a></tr>';
+            html+='<td><input type="button" value="Eliminar" class="btn btn-danger " onclick=Eliminar("'+element.nombre+'")></td>';
+            html+='<td><a href="BACKEND/Meses/'+element.nombre+'" class="btn btn-info" download="'+element.nombre+'">Descargar</a></td></tr>';
         });
         html+='<tr><td>Total:</td><td class="text-left" colspan="2">'+total.meses+' Meses</td>';
-        html+='</table>';
+        html+='</table></div>';
         html+='<input type="button" value="Generar PDF" class="btn btn-primary" id="btnPdf">';
         $("#tablaMes").html(html);
     

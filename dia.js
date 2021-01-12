@@ -105,7 +105,8 @@ function CargarTabla() {
                 total_1.estudios = 0;
                 var archivo = localStorage.getItem("nombreArchivo");
                 var html_1 = '<h1 style="padding-top: 2%;">' + archivo + '</h1> ';
-                html_1 += '<table class="table table-sm table-dark table-dark table-hover">';
+                html_1 += '<div class="table-responsive">';
+                html_1 += '<table class="table table-sm table-dark table-hover">';
                 html_1 += '<tr><th></th><th>Nº</th><th class="text-center">Fecha</th><th class="text-center">Publicaciones</th><th class="text-center">Videos</th><th class="text-center">Horas</th>';
                 html_1 += '<th class="text-center">Revisitas</th><th class="text-center">Estudios</th><th>Modificar</th><th>Eliminar</th></tr>';
                 listaDias.forEach(function (element) {
@@ -125,7 +126,7 @@ function CargarTabla() {
                 total_1.horas = CalcularTotalHoras(arrayHoras_1);
                 html_1 += '<tr><td>Total:</td><td class="text-left" colspan="2">' + total_1.dias + ' Dias</td><td class="text-center">' + total_1.publicaciones + '</td>';
                 html_1 += '<td class="text-center">' + total_1.videos + '</td><td class="text-center">' + total_1.horas + '</td>';
-                html_1 += '<td class="text-center">' + total_1.revisitas + '</td><td class="text-center">' + total_1.estudios + '</td></tr></table>';
+                html_1 += '<td class="text-center">' + total_1.revisitas + '</td><td class="text-center">' + total_1.estudios + '</td></tr></table></div>';
                 html_1 += '<input type="button" value="Generar Informe" class="btn btn-primary" id="btnInforme">';
                 html_1 += '<div id="divInforme" class="mt-2"></div>';
                 $("#tablaMes").html(html_1);
