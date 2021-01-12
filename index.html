@@ -50,21 +50,21 @@
 
     <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-4">
+        <div class="col-xl-4 col-sm-9 col-md-12 col-lg-6 col-xl-4">
             <div class="container mt-5" >
                 <h1 style="padding-top: 2%;">Informe</h1>
                 <form action="" class="form-control " style="height: 1%; background-color: lightgrey;">
 
                   <div class="form-row form-group">
-                      <div class="col-sm-2 col-form-label-sm mt-2 "><label for="dateFecha" class="h6">Fecha</label></div>
-                      <div class="col-sm input-group mb-2 mr-sm-2 mt-2">
+                      <div class="col-sm-2  col-form-label-sm mt-2 "><label for="dateFecha" class="h6">Fecha</label></div>
+                      <div class="col-sm col-md input-group mb-2 mr-sm-2 mt-2">
                           <div class="input-group-text"><label for="dateFecha" class="fas fa-calendar-alt"></label></div>
                           <input type="date" id="dateFecha" class="form-control" required placeholder="Fecha">
                       </div>
                   </div>
 
                 <div class="form-row form-group">
-                  <div class="col-sm-2 col-form-label-sm mt-1"><label for="txtPublicaciones" class="h6">Public.</label></div>
+                  <div class="col-sm-2  col-form-label-sm mt-1"><label for="txtPublicaciones" class="h6">Public.</label></div>
                   <div class="col-sm input-group mb-2 mr-sm-2">
                     <label for="txtPublicaciones" class="fas fa-book-open input-group-text"></label>
                     <input type="number" id="txtPublicaciones" class="form-control" min="0" placeholder="Publicaciones">
@@ -72,7 +72,7 @@
                 </div>
 
                 <div class="form-row form-group">
-                  <div class="col-sm-2 col-form-label-sm mt-1"><label for="txtVideos" class="h6">Videos</label></div>
+                  <div class="col-sm-2   col-form-label-sm mt-1"><label for="txtVideos" class="h6">Videos</label></div>
                   <div class="col-sm input-group mb-2 mr-sm-2">
                     <label for="txtVideos" class="fas fa-video input-group-text"></label>
                     <input type="text" id="txtVideos" class="form-control" min="0" placeholder="Videos">
@@ -80,7 +80,7 @@
                 </div>
 
                 <div class="form-row form-group">
-                  <div class="col-sm-2 col-form-label-sm mt-1"><label for="txtHoras" class="h6">Horas</label></div>
+                  <div class="col-sm-2   col-form-label-sm mt-1"><label for="txtHoras" class="h6">Horas</label></div>
                   <div class="col-sm input-group mb-2 mr-sm-2">
                     <label for="txtHoras" class="fas fa-clock input-group-text"></label>
                     <input type="time" id="txtHoras" value="00:00" class="form-control" placeholder="Horas">
@@ -88,7 +88,7 @@
                 </div>                
 
                 <div class="form-row  form-group">
-                  <div class="col-sm-2 col-form-label-sm mt-1 "><label for="txtRevisitas" class="h6">Revisitas</label></div>
+                  <div class="col-sm-2   col-form-label-sm mt-1 "><label for="txtRevisitas" class="h6">Revisitas</label></div>
                   <div class="col-sm input-group mb-2 mr-sm-2">
                     <label for="txtRevisitas" class="fas fa-user-friends input-group-text"></label>
                     <input type="number" id="txtRevisitas" class="form-control" min="0" placeholder="Revisitas">
@@ -97,7 +97,7 @@
                 </div>
 
                 <div class="form-row form-group">
-                  <div class="col-sm-2 col-form-label-sm mt-1 "><label for="txtEstudios" class="h6">Estudios</label></div>
+                  <div class="col-sm-2   col-form-label-sm mt-1 "><label for="txtEstudios" class="h6">Estudios</label></div>
                     <div class="col-sm input-group mb-2 mr-sm-2">
                       <label for="txtEstudios" class="fas fa-user-graduate input-group-text "></label>
                       <input type="number" id="txtEstudios" class="form-control" min="0" placeholder="Estudios">
@@ -106,7 +106,7 @@
                 </div>
 
                 <div class="form-row form-group">
-                    <div class="col"><input type="button" value="Agregar" class="btn btn-success btn-block"  id="btnAgregar" onclick="Agregar()"></div>
+                    <div class="col"><input type="button" value="Agregar" class="btn btn-success btn-block"  id="btnAgregar"  onclick="Agregar()"></div>
                     <div class="col"><input type="reset" value="Limpiar" class="btn btn-warning btn-block"></div>
                 </div>
       
@@ -115,8 +115,7 @@
             
           </div>
         </div>
-
-        <div class="col-sm">
+        <div class="col-xl col-sm-12 col-md col-lg-6 col-xl-8">
           <div class="container mt-5">
     
             <div id="tablaMes">
