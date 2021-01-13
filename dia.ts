@@ -86,7 +86,7 @@ function CargarTabla()
                 let archivo= localStorage.getItem("nombreArchivo");
                 
                 let html='<h1 style="padding-top: 2%;">'+ archivo +'</h1> ';
-                html+='<div class="table-responsive">';
+                html+='<div class="table-responsive-lg">';
                 html+='<table class="table table-sm table-dark table-hover">';
                 html+='<tr><th></th><th>Nº</th><th class="text-center">Fecha</th><th class="text-center">Publicaciones</th><th class="text-center">Videos</th><th class="text-center">Horas</th>';
                 html+='<th class="text-center">Revisitas</th><th class="text-center">Estudios</th><th>Modificar</th><th>Eliminar</th></tr>';
