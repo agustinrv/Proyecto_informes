@@ -105,7 +105,7 @@ function CargarTabla() {
                 total_1.estudios = 0;
                 var archivo = localStorage.getItem("nombreArchivo");
                 var html_1 = '<h1 style="padding-top: 2%;">' + archivo + '</h1> ';
-                html_1 += '<div class="table-responsive-lg">';
+                html_1 += '<div class="table-responsive">';
                 html_1 += '<table class="table table-sm table-dark table-hover">';
                 html_1 += '<tr><th></th><th>Nº</th><th class="text-center">Fecha</th><th class="text-center">Publicaciones</th><th class="text-center">Videos</th><th class="text-center">Horas</th>';
                 html_1 += '<th class="text-center">Revisitas</th><th class="text-center">Estudios</th><th>Modificar</th><th>Eliminar</th></tr>';
@@ -144,7 +144,7 @@ function GenerarInforme(total) {
     total.minutos = total.horas.split(":")[1];
     total.horas = total.horas.split(":")[0];
     if (total.minutos == "00") {
-        AlertInforme("Informe: " + "</br>" +
+        AlertInforme("<strong>Informe: </strong>" + "</br>" +
             "Publicaciones: " + total.publicaciones + "</br>" +
             "Videos: " + total.videos + "</br>" +
             "Horas: " + total.horas + "</br>" +
@@ -152,7 +152,7 @@ function GenerarInforme(total) {
             "Estudios: " + total.estudios);
     }
     else {
-        AlertInforme("Informe: " + "</br>" +
+        AlertInforme("<strong>Informe: </strong>" + "</br>" +
             "Publicaciones: " + total.publicaciones + "</br>" +
             "Videos: " + total.videos + "</br>" +
             "Horas: " + total.horas + "</br>" +
