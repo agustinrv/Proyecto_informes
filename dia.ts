@@ -1,5 +1,7 @@
 ///<reference path="node_modules/@types/jquery/index.d.ts" />
 ///<reference path="./genericas.ts" />
+///<reference path="./index.php" />
+
 
 
 
@@ -64,6 +66,7 @@ function CargarTabla()
         //processData:false,
         async:true
     }).done(function(respuesta){
+
         
         if(respuesta.exito)
         {
@@ -73,52 +76,28 @@ function CargarTabla()
             }
             else
             {
-                let fila=0;
                 let listaDias=respuesta.listaDias;
-                let total:any={};
-                let arrayHoras=Array();
+                let nombreArchivo=localStorage.getItem("nombreArchivo");
+                let form = new FormData();
+                form.append("cadenaJson",JSON.stringify(respuesta));
 
-                total.dias=listaDias.length;
-                total.publicaciones=0;
-                total.videos=0;
-                total.revisitas=0;
-                total.estudios=0;
-                let archivo= localStorage.getItem("nombreArchivo");
-                
-                let html='<h1 style="padding-top: 2%;">'+ archivo +'</h1> ';
-                html+='<div class="table-responsive">';
-                html+='<table class="table table-sm table-dark table-hover">';
-                html+='<tr><th></th><th>Nº</th><th class="text-center">Fecha</th><th class="text-center">Publicaciones</th><th class="text-center">Videos</th><th class="text-center">Horas</th>';
-                html+='<th class="text-center">Revisitas</th><th class="text-center">Estudios</th><th>Modificar</th><th>Eliminar</th></tr>';
-                listaDias.forEach(element => {
-                    fila++;
-                    total.publicaciones+=parseInt(element.publicaciones);
-                    total.videos+=parseInt(element.videos);
-                    arrayHoras.push(element.horas);
-                    total.revisitas+=parseInt(element.revisitas);
-                    total.estudios+=parseInt(element.estudios);
-
-                    html+='<tr onclick="SeleccionarFilaPrimary('+fila+","+total.dias+')" id="fila-'+fila+'" ><td></td>';
-                    html+='<td class="text-center">'+fila+'</td><td class="text-center">'+element.fecha+'</td>'+'<td class="text-center">'+element.publicaciones+'</td>';
-                    html+='<td class="text-center">'+element.videos+'</td>'+'<td class="text-center">'+element.horas+'</td>';
-                    html+='<td class="text-center">'+element.revisitas+'</td><td class="text-center">'+element.estudios+'</td>';    
-                    html+="<td><input type='button' value='Modificar' class='btn btn-warning' onclick='ArmarModificar("+JSON.stringify(element) +","+fila+")'></td>";
-                    html+='<td><input type="button" value="Eliminar" class="btn btn-danger" onclick="Eliminar('+element.id+","+fila+')"></td></tr>';
+                $.ajax({
+                    url:"index.php",
+                    type:"post",
+                    data:form,
+                    dataType:"json",
+                    contentType:false,
+                    processData:false,
+                    async:true
+                }).done(function(respuesta){
+                    AlertSuccess(respuesta.mensaje);
+                    CargarTabla();
+                    ArmarAgregar();
+                }).fail(function(jqxhr){
+                    console.log(jqxhr.responseText);
+                    let respuesta=JSON.parse(jqxhr.responseText);
+                    AlertDanger(respuesta.mensaje);
                 });
-                total.horas=CalcularTotalHoras(arrayHoras);
-                html+='<tr><td>Total:</td><td class="text-left" colspan="2">'+total.dias+' Dias</td><td class="text-center">'+total.publicaciones+'</td>';
-                html+='<td class="text-center">'+total.videos+'</td><td class="text-center">'+total.horas+'</td>';
-                html+='<td class="text-center">'+total.revisitas+'</td><td class="text-center">'+total.estudios+'</td></tr></table></div>';            
-                html+='<input type="button" value="Generar Informe" class="btn btn-primary" id="btnInforme">';
-                html+='<div id="divInforme" class="mt-2"></div>';
-
-                $("#tablaMes").html(html);
-                $("#btnInforme").attr("onclick","GenerarInforme("+JSON.stringify(total)+")");
-                //GenerarInforme(total);
-
-
-
-                
             }
         }
 

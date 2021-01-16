@@ -272,3 +272,8 @@ function AdministrarValidaciones(dia) {
     }
     return retorno;
 }
+function pruebaPHP()
+{
+    console.log("hola mundo");
+    return "HolaaaaA mundodooodododod";
+}

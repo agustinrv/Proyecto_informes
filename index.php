@@ -46,7 +46,7 @@
 <!--rgb(247, 206, 203) rgb(219, 162, 96)-->
 
 
-<body class="bg-info" onload="CargarTabla()">
+<body class="bg-info" >
 
     <div class="container-fluid">
       <div class="row">
@@ -117,8 +117,57 @@
         </div>
         <div class="col-sm-12 col-md-12 col-lg col-xl-8 ">
           <div class="container mt-5">
+          <button class="btn btn-danger" onclick="pruebaPHP()">Hola</button>
     
-            <div id="tablaMes" ></div>
+            <div id="tablaMes" >
+
+        
+
+
+            <?php
+
+                $fila=2;
+                $total = new stdClass();
+                $total->dias=10;
+                $element=new stdClass();
+                $element->fecha=3;
+                $element->videos=3;
+                $element->horas=3;
+                $element->revisitas=3;
+                $element->estudios=3;
+                $element->publicaciones=150;
+                $element->id=3;       
+
+?>
+                  
+                <h1 style="padding-top: 2%;">'+ $archivo +'</h1> ';
+                <div class="table-responsive">
+                <table class="table table-sm table-dark table-hover">
+                <tr>
+                    <th></th><th>Nº</th><th class="text-center">Fecha</th><th class="text-center">Publicaciones</th><th class="text-center">Videos</th><th class="text-center">Horas</th>
+                    <th class="text-center">Revisitas</th><th class="text-center">Estudios</th><th>Modificar</th><th>Eliminar</th>
+                </tr>
+
+                <tr onclick="SeleccionarFilaPrimary(<?php echo $fila ?> ,<?php echo $total->dias ?>)" id="fila-<?php echo $fila ?>">
+                <td></td>
+                <td class="text-center"><?php echo $fila ?></td><td class="text-center"><?php echo $element->fecha ?></td><td class="text-center"><?php echo $element->publicaciones ?></td>
+                <td class="text-center"><?php echo $element->videos ?></td>
+                <td class="text-center"><?php echo $element->horas ?></td>
+                <td class="text-center"><?php echo $element->revisitas ?></td>
+                <td class="text-center"><?php echo $element->estudios?></td>
+                <td><input type='button' value='Modificar' class='btn btn-warning' onclick=<?php echo 'ArmarModificar('.json_encode($element).','. $fila .')'?> ></td>
+                <td><input type="button" value="Eliminar" class="btn btn-danger" onclick=<?php echo 'Eliminar('.$element->id . ",".$fila.')'?> ></td></tr>
+
+
+                <!--tr><td>Total:</td><td class="text-left" colspan="2">'+total.dias+' Dias</td><td class="text-center">'+total.publicaciones+'</td>
+                <td class="text-center">'+total.videos+'</td><td class="text-center">'+total.horas+'</td>';
+                <td class="text-center">'+total.revisitas+'</td><td class="text-center">'+total.estudios+'</td></tr></table></div>
+                <input type="button" value="Generar Informe" class="btn btn-primary" id="btnInforme">
+                <div id="divInforme" class="mt-2"></div-->
+
+
+
+            </div>
            
           </div>
         </div>
@@ -133,3 +182,8 @@
   
 </body>
 </html>
+
+
+
+
+

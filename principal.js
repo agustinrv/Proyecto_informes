@@ -66,7 +66,7 @@ function CargarTabla() {
         html += '<th class="text-center">Abrir</th><th class="pl-3">Eliminar</th><th class="pl-3">Descargar</th></tr>';
         listaMeses.forEach(function (element) {
             fila++;
-            html += '<tr onclick="SeleccionarFilaPrimary(' + fila + ',' + total.meses + ')" id="fila-' + fila + '"><<td>' + fila + '</td><td>' + element.nombre + '</td><td>' + element.fecha + '</td>';
+            html += '<tr onclick="SeleccionarFilaPrimary(' + fila + ',' + total.meses + ')" id="fila-' + fila + '"><td></td><td>' + fila + '</td><td>' + element.nombre + '</td><td>' + element.fecha + '</td>';
             html += '<td><input type="button" value="Abrir" class="btn btn-success btn-block" onclick=Abrir("' + element.nombre + '")></td>';
             html += '<td><input type="button" value="Eliminar" class="btn btn-danger " onclick=Eliminar("' + element.nombre + '")></td>';
             html += '<td><a href="BACKEND/Meses/' + element.nombre + '" class="btn btn-info" download="' + element.nombre + '">Descargar</a></td></tr>';

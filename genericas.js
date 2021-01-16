@@ -41,4 +41,5 @@ function AlertInforme(mensaje) {
     var html = '<div class="alert alert-info alert-dissmisable">' + mensaje + '</div>';
     $("#divInforme").html(html);
 }
+
 //#endregion
